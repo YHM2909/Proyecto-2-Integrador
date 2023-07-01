@@ -1,28 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Cerebritos</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<main class="bg-gray-50 text-white flex justify-center h-screen w-full items-center">
-    <section class="bg-gray-300 rounded-lg p-5 max-w-fit flex h-min">
-        <div>
+<main class="bg-gray-100 text-white flex justify-center h-screen w-full items-center">
+    <section class="bg-gray-300 rounded-lg p-5 max-w-fit flex gap-5 min-h-[34rem] min-w-[70%]">
+        <div class="w-full flex items-center">
             <div class="p-4">
-                <p>“Desbloquea tu potencial con simulacros de exámenes <br>
+                <p class="text-center font-extrabold text-indigo-500 text-xl">“Desbloquea tu potencial con simulacros de exámenes <br>
                     de admisión y cursos especializados."</p>
+                <img th:src="@{/img/academialogin.png}" alt="">
             </div>
         </div>
-        <div>
-            <form action="" class="bg-white p-5 rounded-lg text-gray-500">
-                <p>Usuario</p>
-                <input type="text" name="" id="usuario" class="border px-2 py-1 rounded-lg mt-2" placeholder="Ingrese usuario">
-                <p>Contraseña</p>
-                <input type="password" name="" id="contraseña" class="border px-2 py-1 rounded-lg mt-2" placeholder="Ingrese contraseña">
-                <div class="pt-2 flex justify-center">
-                    <button class="py-2 px-3 rounded-lg bg-indigo-500 text-white w-full">Ingresar</button>
+        <div class="min-h-full w-full flex justify-end items-center pr-5">
+            <form action="/login" method="POST" class="bg-white p-5 rounded-xl text-gray-500 w-[70%]">
+            <div class="w-full flex justify-center py-3">
+                    <img th:src="@{/iconos/logo_cerebritos.png}"  alt="" class="h-20">
                 </div>
+                <div class="mt-5">
+                    <p>Usuario</p>
+                    <input type="text" name="usuario" id="usuario" class="border px-3 py-2 rounded-lg mt-2 w-full" placeholder="Ingrese usuario">
+                </div>
+                <div class="mt-3">
+                    <p>Contraseña</p>
+                    <input type="password" name="password" id="password" class="border px-3 py-2 w-full rounded-lg mt-2" placeholder="Ingrese contraseña">
+                </div>
+                <div class="pt-2 pb-4 flex justify-center mt-4">
+                    <button class="py-2 px-3 rounded-lg bg-indigo-500 text-white w-full hover:bg-indigo-600">Ingresar</button>
+                </div>
+                <span th:text="${error}" class="text-red-500"></span>
             </form>
         </div>
     </section>

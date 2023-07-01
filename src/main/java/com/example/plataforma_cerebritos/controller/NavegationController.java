@@ -13,4 +13,19 @@ public class NavegationController {
         model.addAttribute("tstamp", LocalDateTime.now());
         return "dashboard";
     }
+
+    @GetMapping("/dashboard")
+    public String redirectToIndex(Model model) {
+        model.addAttribute("tstamp", LocalDateTime.now());
+        return "dashboard";
+    }
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
+    }
+
+    @GetMapping("/curso")
+    public String curso(Model model) {
+        return "cursos";
+    }
 }
