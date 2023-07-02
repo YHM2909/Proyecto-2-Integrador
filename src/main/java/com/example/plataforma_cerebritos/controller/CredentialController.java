@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CredentialController {
     private final CredentialService credentialService;
 
+    // Declaramos el constructor de credentialservice para poder acceder a todas sus funciones
     public CredentialController(CredentialService credentialService) {
         this.credentialService = credentialService;
     }
