@@ -1,18 +1,35 @@
 package com.example.plataforma_cerebritos.models;
+import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
+@Entity
+@Table(name = "alumno")
 public class Alumno {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Añade esta anotación para generar el ID automáticamente
+    @Column(name = "id_alumno")
     private int idAlumno;
+    @Column(name = "id_universidad")
     private int idUniversidad;
+    @Column(name = "password")
     private String password;
+    @Column(name = "nombres")
     private String nombres;
+    @Column(name = "dni")
     private String dni;
+    @Column(name = "correo")
     private String correo;
+    @Column(name = "residencia")
     private String residencia;
+    @Column(name = "usuario")
     private String usuario;
 
     // Constructor
-    public Alumno(int idAlumno, int idUniversidad, String password, String nombres, String dni, String correo, String residencia, String usuario) {
-        this.idAlumno = idAlumno;
+    public Alumno() {
+    }
+
+    public Alumno(int idUniversidad, String password, String nombres, String dni, String correo, String residencia, String usuario) {
         this.idUniversidad = idUniversidad;
         this.password = password;
         this.nombres = nombres;
@@ -23,11 +40,11 @@ public class Alumno {
     }
 
     // Getters and Setters
-    public int getIdAlumno() {
+    public int  getIdAlumno() {
         return idAlumno;
     }
 
-    public void setIdAlumno(int idAlumno) {
+    public void setIdAlumno(int  idAlumno) {
         this.idAlumno = idAlumno;
     }
 
