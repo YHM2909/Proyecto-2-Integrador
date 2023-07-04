@@ -2,18 +2,17 @@ package com.example.plataforma_cerebritos.controller;
 
 import com.example.plataforma_cerebritos.models.Alumno;
 import com.example.plataforma_cerebritos.models.LoginRequest;
+import com.example.plataforma_cerebritos.models.LoginResponse;
 import com.example.plataforma_cerebritos.repository.CredentialRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 
-@RestController
+@Controller
 public class CredentialController {
     private final CredentialRepository credentialRepository;
 
@@ -23,21 +22,22 @@ public class CredentialController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         String passwordMD5 = convertToMD5(loginRequest.getPassword());
 
         Optional<Alumno> optionalAlumno = credentialRepository.findByUsuarioAndPassword(loginRequest.getUsuario(), passwordMD5);
         if (optionalAlumno.isPresent()) {
             // El usuario existe en la base de datos, puedes redirigir a la página principal o hacer alguna acción adicional
             Alumno alumno = optionalAlumno.get();
-            HttpSession session = request.getSession();
-            session.setAttribute("usuario", alumno.getUsuario());
-            session.setAttribute("nombre", alumno.getNombres());
-
-            return ResponseEntity.ok("Inicio de sesión exitoso");
+            String usuario = alumno.getUsuario();
+            String nombres = alumno.getNombres();
+            Integer idalumno = alumno.getIdAlumno();
+            Integer iduniversidad = alumno.getIdUniversidad();
+            LoginResponse loginResponse = new LoginResponse(usuario, nombres, idalumno, iduniversidad);
+            return ResponseEntity.ok(loginResponse);
         } else {
             // El usuario no existe o las credenciales son incorrectas, puedes mostrar un mensaje de error o redirigir a una página de inicio de sesión nuevamente
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
 

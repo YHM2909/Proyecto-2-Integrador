@@ -45,7 +45,6 @@
             usuario: usuario,
             password: password
         };
-
         fetch("/login", {
             method: "POST",
             headers: {
@@ -55,7 +54,16 @@
         })
         .then(function(response) {
             if (response.ok) {
-                // El inicio de sesión fue exitoso
+                response.json().then(function(data) {
+                    console.log(data);
+                    var usuario = data.usuario;
+                    var nombres = data.nombres;
+                    var idalumno = data.idAlumno;
+                    var iduniversidad = data.iduniversidad;
+                    sessionStorage.setItem('usuario', usuario);
+                    sessionStorage.setItem('idalumno', idalumno);
+                    sessionStorage.setItem('iduniversidad', iduniversidad);
+                });
                 window.location.href = "/dashboard"; // Redirige a la página principal
             } else {
                 // Las credenciales son incorrectas
