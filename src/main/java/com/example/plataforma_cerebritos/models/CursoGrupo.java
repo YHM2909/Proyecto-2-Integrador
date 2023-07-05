@@ -13,7 +13,7 @@ public class CursoGrupo {
     private Integer idCurso;
 
     @Column(name = "id_universidad")
-    private Integer universidad;
+    private Integer idUniversidad;
 
     @Column(name = "cantidadpreguntas")
     private Integer cantidadPreguntas;
@@ -35,11 +35,11 @@ public class CursoGrupo {
     }
 
     public Integer getIdUniversidad() {
-        return universidad;
+        return idUniversidad;
     }
 
     public void setIdUniversidad(Integer idUniversidad) {
-        this.universidad = idUniversidad;
+        this.idUniversidad = idUniversidad;
     }
 
     public Integer getCantidadPreguntas() {

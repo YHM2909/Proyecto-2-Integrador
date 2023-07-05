@@ -33,20 +33,11 @@ public class NavegationController {
     }
     @GetMapping("/cursos")
     public String cursos(@RequestParam("idalumno") String idalumno,
-                         @RequestParam("iduniversidad") String iduniversidad,
-                         @RequestParam("usuario") String usuario,
-                         Model model) {
+                         @RequestParam("iduniversidad") String idUniversidad, Model model) {
         // Obtener la lista de cursos del CursoGrupoRepository
-        List<CursoGrupo> cursosGrupo = cursoGrupoRepository.findByUniversidadAndAlumno(Integer.parseInt(iduniversidad), Integer.parseInt(idalumno));
+        List<String> nombresCursos = cursoGrupoRepository.findCursoNombresByUniversidad(Integer.parseInt(idUniversidad));
         // Obtener los nombres de los cursos del CursoRepository
-        List<String> nombresCursos = cursosGrupo.stream()
-                .map(cursoGrupo -> cursoRepository.findById(cursoGrupo.getIdCurso()))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(Curso::getNombre)
-                .collect(Collectors.toList());
         model.addAttribute("cursos", nombresCursos);
-        System.out.println("-----------NOMBRES DE CURSOS----------");
         System.out.println(nombresCursos);
         return "cursos";
     }
