@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Academia cerebritos</title>
 </head>
-<body>
-
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <h1 th:text="${usuario}"></h1>
+    <h1 class="text-black">Este es el contenido de mi dashboard</h1>
+    <h1>Hello from Spring Boot!</h1>
+    <p>This page is served at <span th:text="${tstamp}"></span></p>
+    <img th:src="@{/img/benefits.jpg}" alt="Imagen de beneficios">
+    <p>Otro texto de prueba</p>
+</div>
 </body>
 </html>
