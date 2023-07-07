@@ -30,7 +30,7 @@
                        <span id="usuario"></span>
                     </div>
                     <div>
-                        <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                        <button type="button" data-toggle="logout-modal" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false">
                             <span class="sr-only">Open user menu</span>
                             <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
                         </button>
@@ -40,7 +40,10 @@
         </div>
     </div>
 </nav>
-
+<div class="modal-settings ">
+    <button>Configuraciones</button>
+    <button>Cerrar sesión</button>
+</div>
 <aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0" aria-label="Sidebar">
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white">
         <ul class="space-y-3 font-medium pt-5">
@@ -65,6 +68,7 @@
         </ul>
     </div>
 </aside>
+
 <main class="p-10 sm:ml-64 bg-gray-100 min-h-screen">
     <div th:replace="~{::content}"></div>
 </main>
@@ -93,6 +97,12 @@
         var iduniversidad = sessionStorage.getItem("iduniversidad");
         window.location.href = "/simulacro?idalumno=" + idalumno + "&iduniversidad=" + iduniversidad;
     }
+
+    var logoutButton = document.querySelector('[data-toggle="logout-modal"]');
+    logoutButton.addEventListener('click', function() {
+        sessionStorage.clear();
+        window.location.href = "/login";
+    });
 
 </script>
 </body>

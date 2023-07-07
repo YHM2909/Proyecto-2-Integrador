@@ -41,4 +41,10 @@ public class NavegationController {
         System.out.println(nombresCursos);
         return "cursos";
     }
+
+    @GetMapping("/prueba")
+    public String prueba(Model model) {
+        // Haz algo con los valores de usuario y nombre
+        return "prueba";
+    }
 }

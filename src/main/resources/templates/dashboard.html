@@ -2,16 +2,106 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Academia cerebritos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
 </head>
 <body th:replace="layout.html">
 <!-- Contenido específico de la página -->
 <div th:fragment="content" class="pt-10">
-    <h1 th:text="${usuario}"></h1>
-    <h1 class="text-black">Este es el contenido de mi dashboard</h1>
-    <h1>Hello from Spring Boot!</h1>
-    <p>This page is served at <span th:text="${tstamp}"></span></p>
-    <img th:src="@{/img/benefits.jpg}" alt="Imagen de beneficios">
-    <p>Otro texto de prueba</p>
+    <h1 class="text-gray-700 font-extrabold text-lg mt-10">Dashboard</h1>
+    <div class="p-4">
+        <div class="container-dashboard">
+            <div class="">
+                <!-- Charts -->
+                <div class="mb-8 container-charts">
+                    <div class="border p-4">
+                        <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                            Eventos por mes
+                        </h4>
+                        <canvas id="mychartlinechart"></canvas>
+                    </div>
+                    <div class="border p-4">
+                        <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
+                            Eventos por clientes
+                        </h4>
+                        <canvas id="barrahorizontal"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    function ActualizarGraficos() {
+    // Datos de ejemplo para los gráficos
+    const eventosAnual = [1200, 1500, 1800, 2100, 2400, 2700, 3000, 3300, 3600, 3900, 4200, 4500];
+    const clientesEvento = [
+        { cliente: "Cliente A", eventos: 500 },
+        { cliente: "Cliente B", eventos: 700 },
+        { cliente: "Cliente C", eventos: 900 },
+        { cliente: "Cliente D", eventos: 1100 },
+        { cliente: "Cliente E", eventos: 1300 },
+    ];
+
+    // Inicializamos el gráfico de Lines Eventos por mes
+    const xValues = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+    const yValues = eventosAnual;
+
+    new Chart("mychartlinechart", {
+        type: "line",
+        data: {
+            labels: xValues,
+            datasets: [{
+                fill: false,
+                lineTension: 0,
+                backgroundColor: "#9B59B6",
+                borderColor: "#D2B4DE",
+                data: yValues,
+                borderWidth: 5,
+            }]
+        },
+        options: {
+            legend: { display: false },
+            scales: {
+                yAxes: [{ ticks: { min: 5000, max: 20000 } }],
+            }
+        }
+    });
+
+    // Inicializamos el gráfico de barras horizontales Eventos por cliente
+    const xValuesH = clientesEvento.map(objeto => objeto.cliente);
+    const yValuesH = clientesEvento.map(objeto => objeto.eventos);
+    const barColors = ["#EC7063", "#5DADE2", "#76D7C4", "#FAD7A0", "#FAD7A0"];
+
+    // Establecer el grosor máximo para barras con un solo valor
+    const containerWidth = document.getElementById("barrahorizontal").offsetWidth;
+    const maxBarThickness = yValuesH.length <= 1 ? containerWidth / 10 : undefined;
+
+    new Chart("barrahorizontal", {
+        type: "horizontalBar",
+        data: {
+            labels: xValuesH,
+            datasets: [{
+                backgroundColor: barColors,
+                data: yValuesH,
+                barThickness: maxBarThickness
+            }]
+        },
+        options: {
+            legend: { display: false },
+            title: { display: true },
+            scales: {
+                xAxes: [{
+                    ticks: { beginAtZero: true },
+                    barPercentage: 1.5
+                }]
+            }
+        }
+    });
+}
+document.addEventListener("DOMContentLoaded", function () {
+    ActualizarGraficos();
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 </body>
 </html>

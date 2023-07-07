@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+    <div th:fragment="content" class="pt-10">
+        <h1 class="text-red-400 font-extrabold text-2xl">PRUEBA TEST</h1>
+        <div class="flex w-full mt-10">
+            <div class="bg-white p-5 rounded-lg min-w-[400px] shadow-lg">
+                <div class="flex justify-between px-3">
+                   <h3>Registro notas</h3>
+                    <button class="py-2 px-4 bg-orange-400 rounded-lg ">Reportes</button>
+                </div>
+                <div>
+                    <table>
+                        <th>
+                            <tr></tr>
+                        </th>
+                    </table>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </div>
+</body>
+</html>
