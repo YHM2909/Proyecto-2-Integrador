@@ -1,162 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Plataforma Cerebritos</title>
-    <style>
-        body{
-        margin: 0;
-        padding: 0;
-        font-family: montserrat;
-        background: #fff;
-        font-family: Arial;
-        }
-        nav ul{
-        margin:0;
-        padding:0;
-        height:100%;
-        width:260px;
-        position:fixed;
-        top:0;
-        left:0;
-        background-color:#e3e9f7;
-        }
-        nav ul li{
-        list-style=none;
-        }
-        nav ul li a{
-        display: block;
-        font-family: montserrat;
-        text-decoration: none;
-        text-transform: uppercase;
-        font-size: 20px;
-        color:#2b2626;
-        position: relative;
-        padding:25px 0 25px 25px;
-        }
-        nav ul li a:before{
-        content: '';
-        position:absolute;
-        top:0;
-        left:0;
-        width:0;
-        height:100%;
-        background:#a4b2ff;
-        border-radius:0 40px 40px 0;
-        z-index:-1;
-        transition: all 300ms ease-in-out;
-        }
-        nav ul li a:hover{
-        color:#fff;
-        }
-        nav ul li a:hover:before{
-        width:95%;
-        }
-        .wrapper{
-        margin-left:260px;
-        }
-        .section{
-        display: grid;
-        place-items: up;
-        min-height: 100vh;
-        text-align: center;
-        }
-        .box-area h2{
-        text-transform: uppercase;
-        font-size:30px;
-        }
-        .box-area{
-        width: 75%;
-        }
-        .logo{
-        width:150px;
-        height:150px;
-        overflow:hidden;
-        margin:25px auto;
-        }
-        .logo img{
-        width:100%;
-        }
-        .icono{
-        width:50px;
-        height:50px;
-        margin:auto;
-        }
-        #main-container{
-        margin:30px auto;
-        width: 600px;
-        }
-        table{
-        background-color:white;
-        text-align:center;
-        border-collapse:collapse;
-        width:150%;
-        }
-        th,td{
-        width:90px;
-        height:120px;
-        }
-        thead{
-        background-color:#fff;
-        border-bottom:solid 7px #0F362D;
-        color:white;
-        }
-        tr:nth-child(even){
-        background-color:#ddd;
-        }
-        td:hover{
-        background-color:#a4b2ff;
-        color:white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../static/css/cursos-style.css">
+  <title>Plataforma Cerebritos</title>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li class="logo"><img src="../img/Logo.png" alt=""></li>
-            <li><a href="#">&nbsp; Dashboard</a></li>
-            <li><a href="#">&nbsp; Simulacro</a></li>
-            <li><a href="#">&nbsp; Cursos</a></li>
-        </ul>
-    </nav>
-    <div id="main-container">
-        <table>
-            <thead>
-            <tr>
-                <th>
-                    <h1 style="color: #2b2626">Catalogo de cursos</h1>
-                </th>
-            </tr>
-            </thead>
-            <tr>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Geometria</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Trigonometria</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Algebra</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Aritmetica</h2></td>
-            </tr>
-            <tr>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Lenguaje</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Geografia</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Fisica</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Filosofia</h2></td>
-            </tr>
-            <tr>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Historia del Perú</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Historia Universal</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Biologia</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Quimica</h2></td>
-            </tr>
-            <tr>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h3>Psicologia</h3></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h3>Literatura</h3></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h3>Habilidad Verbal</h3></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h3>Habilidad Matematica</h3></td>
-            </tr>
-            <tr>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Educacion Civica</h2></td>
-                <td><img class="icono" src="../img/libro-abierto.png" alt=""><h2>Economia</h2></td>
-            </tr>
-        </table>
-    </div>
+<nav>
+  <ul>
+    <li class="logo"><img src="../static/img/Logo1.png" alt=""></li>
+    <li><a href="#">&nbsp; Dashboard</a></li>
+    <li><a href="#">&nbsp; Simulacro</a></li>
+    <li><a href="#">&nbsp; Cursos</a></li>
+  </ul>
+</nav>
+<div id="main-container">
+  <table>
+    <thead>
+    <tr>
+      <th>
+        <h1 style="color: #2b2626">Catalogo de cursos</h1>
+      </th>
+    </tr>
+    </thead>
+    <tr>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Geometria</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Trigonometria</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Algebra</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Aritmetica</h2></td>
+    </tr>
+    <tr>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Lenguaje</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Geografia</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Fisica</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Filosofia</h2></td>
+    </tr>
+    <tr>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Historia del Perú</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Historia Universal</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Biologia</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Quimica</h2></td>
+    </tr>
+    <tr>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h3>Psicologia</h3></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h3>Literatura</h3></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h3>Habilidad Verbal</h3></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h3>Habilidad Matematica</h3></td>
+    </tr>
+    <tr>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Educacion Civica</h2></td>
+      <td><img class="icono" src="../static/img/libro-abierto.png" alt=""><h2>Economia</h2></td>
+    </tr>
+  </table>
+</div>
 </body>
 </html>
