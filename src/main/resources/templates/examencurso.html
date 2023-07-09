@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>
+</head>
+<body th:replace="layout.html">
+<div th:fragment="content" class="pt-10">
+    <h1>Examen curso</h1>
+    <ul>
+        <li th:each="pregunta : ${preguntasSeleccionadas}">
+            <h2 th:text="${pregunta.descripcion}"></h2>
+            <ul>
+                <li th:each="respuesta : ${pregunta.respuestas}">
+                    <input type="radio" th:id="'respuesta-' + ${pregunta.id} + '-' + ${respuesta.id}" name="'pregunta-' + ${pregunta.id}" th:value="${respuesta.id}">
+                    <label th:for="'respuesta-' + ${pregunta.id} + '-' + ${respuesta.id}" th:text="${respuesta.descripcion}"></label>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
