@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CursoRepository extends JpaRepository<Curso, Integer> {
-    // Puedes agregar métodos personalizados si necesitas buscar cursos por algún otro criterio
+    Curso findCursoByIdCurso(Integer idCurso);
 }

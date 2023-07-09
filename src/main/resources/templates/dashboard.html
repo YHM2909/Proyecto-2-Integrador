@@ -7,7 +7,7 @@
 <body th:replace="layout.html">
 <!-- Contenido específico de la página -->
 <div th:fragment="content" class="pt-10">
-    <h1 class="text-gray-700 font-extrabold text-lg mt-10">Dashboard</h1>
+    <h1 class="text-gray-700 font-extrabold text-lg">Dashboard</h1>
     <div class="p-4">
         <div class="container-dashboard">
             <div class="">
@@ -15,13 +15,13 @@
                 <div class="mb-8 container-charts">
                     <div class="border p-4">
                         <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                            Eventos por mes
+                            Resultados por mes
                         </h4>
                         <canvas id="mychartlinechart"></canvas>
                     </div>
                     <div class="border p-4">
                         <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                            Eventos por clientes
+                            Resultados por cursos
                         </h4>
                         <canvas id="barrahorizontal"></canvas>
                     </div>

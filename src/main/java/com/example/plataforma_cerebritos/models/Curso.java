@@ -15,6 +15,14 @@ public class Curso {
     @Column(name = "nombre")
     private String nombre;
 
+    public Curso(Integer idCurso, String nombre) {
+        this.idCurso = idCurso;
+        this.nombre = nombre;
+    }
+
+    public Curso(){
+
+    }
     public Integer getIdCurso() {
         return idCurso;
     }
