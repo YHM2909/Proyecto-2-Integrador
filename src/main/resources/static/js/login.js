@@ -33,6 +33,7 @@
                     var iduniversidad = data.iduniversidad;
                     sessionStorage.setItem('usuario', usuario);
                     sessionStorage.setItem('idalumno', idalumno);
+                    sessionStorage.setItem('nombre', nombres);
                     sessionStorage.setItem('iduniversidad', iduniversidad);
                 });
                 window.location.href = "/dashboard"; // Redirige a la página principal

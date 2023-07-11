@@ -1,8 +1,7 @@
 package com.example.plataforma_cerebritos.controller;
 
-import com.example.plataforma_cerebritos.models.CursoDto;
-import com.example.plataforma_cerebritos.models.RespuestaPregunta;
-import com.example.plataforma_cerebritos.models.Temario;
+import com.example.plataforma_cerebritos.models.*;
+import com.example.plataforma_cerebritos.repository.CursoRepository;
 import com.example.plataforma_cerebritos.repository.PreguntaRepository;
 import com.example.plataforma_cerebritos.repository.RespuestaPreguntaRepository;
 import com.example.plataforma_cerebritos.repository.TemarioRepository;
@@ -14,12 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.example.plataforma_cerebritos.models.Pregunta;
-
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+import java.time.format.DateTimeFormatter;
 @Controller
 public class CursosController {
     @Autowired
@@ -28,6 +26,8 @@ public class CursosController {
     private TemarioRepository temarioRepository;
     @Autowired
     private RespuestaPreguntaRepository respuestaPreguntaRepository;
+    @Autowired
+    private CursoRepository cursoRepository;
     @GetMapping("/temarioscurso")
     @ResponseBody
     public ResponseEntity<List<Temario>> temarioscurso(@RequestParam("idcurso") String idCurso) {
@@ -40,14 +40,15 @@ public class CursosController {
                               @RequestParam("temariosSeleccionados") List<Integer> temariosSeleccionados, Model model) {
         // Aquí se almacenarán las preguntas seleccionadas con sus respuestas
         List<Pregunta> preguntasSeleccionadas = new ArrayList<>();
-
-        // Consultar preguntas para cada temario seleccionado
+        Curso curso = cursoRepository.findCursoByIdCurso(cursoId);
+        String nombreCurso = curso.getNombre();
+        int tiempoExamen = temariosSeleccionados.size() * 5 * 2;
+        int cantidadPreguntas = temariosSeleccionados.size() * 5;
         for (Integer temarioId : temariosSeleccionados) {
             List<Pregunta> preguntasTemario = preguntaRepository.findByIdTemario(temarioId);
             if (!preguntasTemario.isEmpty()) {
-                // Obtener 5 preguntas de manera aleatoria
                 int totalPreguntas = preguntasTemario.size();
-                int preguntasSeleccionadasCount = Math.min(5, totalPreguntas); // Limitar a 5 preguntas
+                int preguntasSeleccionadasCount = Math.min(5, totalPreguntas);
                 List<Integer> indicesAleatorios = generarIndicesAleatorios(totalPreguntas, preguntasSeleccionadasCount);
                 for (Integer indice : indicesAleatorios) {
                     Pregunta pregunta = preguntasTemario.get(indice);
@@ -57,7 +58,15 @@ public class CursosController {
                 }
             }
         }
+        // Obtener la hora actual
+        LocalTime horaActual = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Formato de hora:minuto:segundo
+        String horaActualFormateada = horaActual.format(formatter);
         model.addAttribute("preguntasSeleccionadas", preguntasSeleccionadas);
+        model.addAttribute("nombreCurso", nombreCurso);
+        model.addAttribute("tiempoExamen", tiempoExamen);
+        model.addAttribute("horaActual", horaActualFormateada);
+        model.addAttribute("cantidadPreguntas", cantidadPreguntas);
         return "examencurso";
     }
 
