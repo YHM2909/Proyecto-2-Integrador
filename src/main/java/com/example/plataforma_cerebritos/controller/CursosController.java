@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -73,7 +73,7 @@ public class CursosController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Formato de hora:minuto:segundo
         String horaActualFormateada = horaActual.format(formatter);
         model.addAttribute("preguntasSeleccionadas", preguntasSeleccionadas);
-        model.addAttribute("nombreCurso", cursoId);
+        model.addAttribute("nombreCurso", curso.getNombre());
         model.addAttribute("idCurso", idCurso);
         model.addAttribute("tiempoExamen", tiempoExamen);
         model.addAttribute("evaluacionId", evaluacionId);
@@ -110,6 +110,11 @@ public class CursosController {
         int totalPreguntas = respuestas.size();
         double puntajeMaximo = 20.0;
         double puntajePorPregunta = puntajeMaximo / totalPreguntas;
+
+        // Redondear el puntaje por pregunta a 2 decimales
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        puntajePorPregunta = Double.parseDouble(decimalFormat.format(puntajePorPregunta));
+
         int preguntasCorrectas = 0;
         for (DatosCursoExamen.Respuesta respuesta : respuestas) {
             if (respuesta.getRespuestaValor() == 1) {

@@ -7,14 +7,19 @@
 <body th:replace="layout.html">
 <div th:fragment="content" class="pt-10">
     <span class="text-3xl font-extrabold pb-3 text-gray-700">Resultados evaluación curso</span>
-    <div class="mt-8">
+    <div class="mt-8 p-5 rounded-xl bg-white">
         <div th:each="resultado, iterStat : ${resultados}"
-             class="text-white p-4 rounded-md mb-4"
-             th:classappend="${resultado.estado == 0} ? 'bg-[#FF0000]' : 'bg-[#008000]'">
-            <h2 class="descripcion_pregunta text-xl font-extrabold py-2 text-white">Pregunta
-                <span th:text="${iterStat.count}" class="numero_pregunta"></span>
-            </h2>
-            <p th:text="${resultado.calificacion}"></p>
+             class="text-white py-2 px-5 rounded-xl mb-4 flex justify-between items-center"
+             th:classappend="${resultado.estado == 0} ? 'bg-[#ff4040]' : 'bg-[#40ff8a]'">
+            <div>
+                <h2 class="descripcion_pregunta text-sm font-extrabold text-white">Pregunta
+                    <span th:text="${iterStat.count}" class="numero_pregunta"></span>
+                </h2>
+                <p class="text-white font-sm text-sm">Calificación <span th:text="${resultado.calificacion}"></span></p>
+            </div>
+            <div class="p-4 rounded-full">
+                <i class="fa-solid fa-arrow-down-long"></i>
+            </div>
         </div>
     </div>
 </div>
