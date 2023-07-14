@@ -1,0 +1,244 @@
+*{
+margin:0px;
+padding:0px;
+}
+div#general{
+margin-top:30px;
+width:1300px;
+height:900px;
+position:relative;
+}
+div#principal{
+flex:1;
+width:250px;
+height:900px;
+position:absolute;
+left:0;
+top:0;
+}
+div#cabecera{
+display:flex;
+width:1040px;
+height:180px;
+position:absolute;
+top:20px;
+left:25%;
+}
+div#body{
+width:1040px;
+height:700px;
+background-color:#fff;
+position:absolute;
+display:flex;
+margin-top:50px;
+right:0%;
+}
+nav ul{
+        margin:0;
+        padding:0;
+        height:100%;
+        width:260px;
+        position:fixed;
+        top:0;
+        left:0;
+        background-color:#e3e9f7;
+}
+nav ul li{
+        list-style=none;
+}
+nav ul li a{
+        display: block;
+        font-family: montserrat;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 20px;
+        color:#2b2626;
+        position: relative;
+        padding:25px 0 25px 25px;
+}
+nav ul li a:before{
+        content:'';
+        position:absolute;
+        top:0;
+        left:0;
+        width:0;
+        height:100%;
+        background:#a4b2ff;
+        border-radius:0 40px 40px 0;
+        z-index:-1;
+        transition: all 300ms ease-in-out;
+}
+nav ul li a:hover{
+        color:#fff;
+}
+nav ul li a:hover:before{
+        width:95%;
+}
+.logo{
+        width:150px;
+        height:150px;
+        overflow:hidden;
+        margin:25px auto;
+ }
+.logo img{
+        width:100%;
+ }
+ .t-1{
+ margin-left:70px;
+ margin-top:90px;
+ margin-bottom:70px;
+ background-color:white;
+ border-radius:8px;
+ box-shadow: inset 0 0 3px 0 #111;
+ }
+ tr, td{
+ padding:10px;
+ }
+ .t-2{
+ margin-left:70px;
+ background-color:white;
+ border-radius:8px;
+ box-shadow: inset 0 0 3px 0 #111;
+ }
+ .fila-1{
+         display:block;
+         width:100px;
+         text-align:center;
+         font-family:Arial,Helvetica,sans-serif;
+         border:3px solid;
+         border-radius:6px;
+         margin-left:60px;
+         margin-top:10px;
+         /*margin:30px;
+         padding:10px 40px;*/
+         color:#fff;
+         background-color:#d42032;
+ }
+ .fila-2{
+          display:block;
+          width:100px;
+          text-align:center;
+          font-family:Arial,Helvetica,sans-serif;
+          border:3px solid;
+          border-radius:6px;
+          margin-left:60px;
+          margin-top:10px;
+          color:#fff;
+          background-color:#d42032;
+  }
+  .fila-3{
+           display:block;
+           text-align:center;
+           width:100px;
+           font-family:Arial,Helvetica,sans-serif;
+           border:3px solid;
+           border-radius:6px;
+           margin-left:60px;
+           margin-top:10px;
+           margin-bottom:20px;
+           color:#fff;
+           background-color:#d42032;
+   }
+div#grafica{
+width:600px;
+margin:auto;
+border:2px solid #ccc;
+margin-right:30px;
+margin-left:30px;
+}
+.titulo{
+margin-bottom:30px;
+}
+.div-btn{
+margin-left:110px;
+width:100px;
+font-family:Arial,Helvetica,sans-serif;
+border:1px solid;
+border-radius:6px;
+padding:10px 30px;
+color:#fff;
+background-color:#a4b2ff;
+}
+.container{
+width:100%;
+background-color:#ddd;
+}
+.skills{
+text-align:right;
+padding:10px;
+color:white;
+font-weight:bold;
+}
+.am{
+background-color:#6be377;
+animation:fillam 2s forwards;
+}
+.aritmetica{
+background-color:#6be377;
+animation:fillaritmetica 2s forwards;
+}
+.algebra{
+background-color:#f7bf65;
+animation:fillalgebra 2s forwards;
+}
+.lenguaje{
+background-color:#6be377;
+animation:filllenguaje 2s forwards;
+}
+.literatura{
+background-color:#f0e40e;
+animation:fillliteratura 2s forwards;
+}
+.geometria{
+background-color:#f0e40e;
+animation:fillgeometria 2s forwards;
+}
+.trigonometria{
+background-color:#f7bf65;
+animation:filltrigonometria 2s forwards;
+}
+.quimica{
+background-color:#6be377;
+animation:fillquimica 2s forwards;
+}
+.fisica{
+background-color:#f7bf65;
+animation:fillfisica 2s forwards;
+}
+@keyframes fillam{
+0%{width: 0;}
+100%{width:80%;}
+}
+@keyframes fillaritmetica{
+0%{width:0;}
+100%{width:50%;}
+}
+@keyframes fillalgebra{
+0%{width:0;}
+100%{width:30%;}
+}
+@keyframes filllenguaje{
+0%{width:0;}
+100%{width:60%;}
+}
+@keyframes fillliteratura{
+0%{width:0;}
+100%{width:20%;}
+}
+@keyframes fillgeometria{
+0%{width:0;}
+100%{width:15%;}
+}
+@keyframes filltrigonometria{
+0%{width:0;}
+100%{width:40%;}
+}
+@keyframes fillquimica{
+0%{width:0;}
+100%{width:70%;}
+}
+@keyframes fillfisica{
+0%{width:0;}
+100%{width:30%;}
+}
+
