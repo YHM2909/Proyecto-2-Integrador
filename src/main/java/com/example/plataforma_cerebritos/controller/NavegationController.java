@@ -1,13 +1,6 @@
 package com.example.plataforma_cerebritos.controller;
-import com.example.plataforma_cerebritos.models.CursoDto;
-import com.example.plataforma_cerebritos.models.CursoGrupo;
-import com.example.plataforma_cerebritos.models.Curso;
-import com.example.plataforma_cerebritos.models.EvaluacionCurso;
-import com.example.plataforma_cerebritos.models.Temario;
-import com.example.plataforma_cerebritos.repository.CursoGrupoRepository;
-import com.example.plataforma_cerebritos.repository.CursoRepository;
-import com.example.plataforma_cerebritos.repository.EvaluacionCursoRepository;
-import com.example.plataforma_cerebritos.repository.TemarioRepository;
+import com.example.plataforma_cerebritos.models.*;
+import com.example.plataforma_cerebritos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +19,8 @@ public class NavegationController {
     @Autowired
     private TemarioRepository temarioRepository;
     @Autowired
+    private ResultadoPreguntaCursoRepository resultadoPreguntaCursoRepository;
+    @Autowired
     private CursoRepository cursoRepository;
     @GetMapping("/")
     public String index(Model model) {
@@ -40,6 +35,19 @@ public class NavegationController {
     public String dashboard(Model model) {
         return "dashboard";
     }
+
+    @GetMapping("/resultadoscurso")
+    public String resultadoscurso(@RequestParam("idevaluacion") int idevaluacion, Model model) {
+        // Utiliza el ID de evaluación en tu lógica de negocio
+        System.out.println("ID de evaluación: " + idevaluacion);
+        // Obtén la lista de resultados de preguntas para el idevaluacion
+        List<ResultadoPreguntaCurso> resultados = resultadoPreguntaCursoRepository.findByIdEvaluacionCurso(idevaluacion);
+        // Agrega la lista de resultados a tu modelo
+        model.addAttribute("resultados", resultados);
+        return "resultadoscurso";
+    }
+
+
     @GetMapping("/cursos")
     public String cursos(@RequestParam("idalumno") String idalumno,
                          @RequestParam("iduniversidad") String idUniversidad, Model model) {

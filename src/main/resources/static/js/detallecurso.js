@@ -42,31 +42,41 @@ document.addEventListener("DOMContentLoaded", function() {
       showCancelButton: true,
       confirmButtonText: "Comenzar"
     }).then(result => {
-      if (result.isConfirmed) {
-        // Crear un formulario para enviar los datos al controlador
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/examencurso';
+         if (result.isConfirmed) {
+           // Crear un formulario para enviar los datos al controlador
+           const form = document.createElement('form');
+           form.method = 'POST';
+           form.action = '/examencurso';
 
-        // Agregar los campos ocultos con los IDs de los temarios seleccionados y el ID del curso
-        temariosSeleccionados.forEach(idTemario => {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = 'temariosSeleccionados';
-          input.value = idTemario;
-          form.appendChild(input);
-        });
+           // Obtener el ID del alumno de sessionStorage
+           const idAlumno = sessionStorage.getItem('idalumno');
 
-        const cursoInput = document.createElement('input');
-        cursoInput.type = 'hidden';
-        cursoInput.name = 'cursoId';
-        cursoInput.value = cursoId;
-        form.appendChild(cursoInput);
+           // Agregar campo oculto con el ID del alumno al formulario
+           const idAlumnoInput = document.createElement('input');
+           idAlumnoInput.type = 'hidden';
+           idAlumnoInput.name = 'idAlumno';
+           idAlumnoInput.value = idAlumno;
+           form.appendChild(idAlumnoInput);
 
-        // Agregar el formulario al documento y enviarlo
-        document.body.appendChild(form);
-        form.submit();
-      }
+           // Agregar los campos ocultos con los IDs de los temarios seleccionados y el ID del curso
+           temariosSeleccionados.forEach(idTemario => {
+             const input = document.createElement('input');
+             input.type = 'hidden';
+             input.name = 'temariosSeleccionados';
+             input.value = idTemario;
+             form.appendChild(input);
+           });
+
+           const cursoInput = document.createElement('input');
+           cursoInput.type = 'hidden';
+           cursoInput.name = 'cursoId';
+           cursoInput.value = cursoId;
+           form.appendChild(cursoInput);
+
+           // Agregar el formulario al documento y enviarlo
+           document.body.appendChild(form);
+           form.submit();
+         }
     });
   });
 });

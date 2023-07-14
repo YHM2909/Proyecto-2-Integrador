@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+  <title>Academia cerebritos</title>
+</head>
+<body th:replace="layout.html">
+<div th:fragment="content" class="pt-10">
+    <span class="text-3xl font-extrabold pb-3 text-gray-700">Resultados evaluación curso</span>
+    <div class="mt-8">
+        <div th:each="resultado, iterStat : ${resultados}"
+             class="text-white p-4 rounded-md mb-4"
+             th:classappend="${resultado.estado == 0} ? 'bg-[#FF0000]' : 'bg-[#008000]'">
+            <h2 class="descripcion_pregunta text-xl font-extrabold py-2 text-white">Pregunta
+                <span th:text="${iterStat.count}" class="numero_pregunta"></span>
+            </h2>
+            <p th:text="${resultado.calificacion}"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
