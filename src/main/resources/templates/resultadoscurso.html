@@ -9,7 +9,7 @@
     <span class="text-3xl font-extrabold pb-3 text-gray-700">Resultados evaluación curso</span>
     <div class="mt-8 p-5 rounded-xl bg-white">
         <div th:each="resultado, iterStat : ${resultados}"
-             class="text-white py-2 px-5 rounded-xl mb-4 flex justify-between items-center"
+             class="text-white px-5 rounded-xl mb-4 flex justify-between items-center"
              th:classappend="${resultado.estado == 0} ? 'bg-[#ff4040]' : 'bg-[#40ff8a]'">
             <div>
                 <h2 class="descripcion_pregunta text-sm font-extrabold text-white">Pregunta
@@ -17,7 +17,8 @@
                 </h2>
                 <p class="text-white font-sm text-sm">Calificación <span th:text="${resultado.calificacion}"></span></p>
             </div>
-            <div class="p-4 rounded-full">
+            <div class="p-4 rounded-full flex items-center gap-3">
+                <button class="btn_versolucion py-2 px-3 rounded-lg bg-red-300">Ver solución</button>
                 <i class="fa-solid fa-arrow-down-long"></i>
             </div>
         </div>

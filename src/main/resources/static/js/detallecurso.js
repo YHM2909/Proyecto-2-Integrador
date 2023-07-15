@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
   const btnrealizarexamen = document.getElementById("realizar_examen");
   btnrealizarexamen.addEventListener("click", function () {
+    // Obtenemos el idCurso
     const cursoId = this.dataset.cursoId;
+    // Declaramos una lista de temarios seleccionados
     const temariosSeleccionados = [];
+
     fetch(`/temarioscurso?idcurso=${cursoId}`)
       .then(response => response.json())
       .then(data => {
@@ -17,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function() {
           `;
           formEmpezarExamen.appendChild(checkboxDiv);
           // Escuchar el evento change de los checkboxes
+          // Al darse click a un checkbox se obtendra el idtemario y se almacena en la listatemarios
           const checkbox = checkboxDiv.querySelector(`#checkbox-${temario.idTemario}`);
           checkbox.addEventListener('change', function() {
             if (this.checked) {
@@ -33,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
       .catch(error => {
         console.error('Error:', error);
       });
+    // Estamos usando la libreria sweet alert
     Swal.fire({
       html: `
         <p class="text-xl text-gray-700 mb-5">Elige los temas que deseas incluir en el examen</p>
@@ -46,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function() {
            // Crear un formulario para enviar los datos al controlador
            const form = document.createElement('form');
            form.method = 'POST';
+           // Cuando se le da confirm se le hace el llamado a el controllador /examencurso
            form.action = '/examencurso';
 
            // Obtener el ID del alumno de sessionStorage
@@ -72,9 +78,10 @@ document.addEventListener("DOMContentLoaded", function() {
            cursoInput.name = 'cursoId';
            cursoInput.value = cursoId;
            form.appendChild(cursoInput);
-
            // Agregar el formulario al documento y enviarlo
            document.body.appendChild(form);
+
+           // Al controllador se le envia el idAlumno, la lista de temarios seleccionados y el idcurso
            form.submit();
          }
     });

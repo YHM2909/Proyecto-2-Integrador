@@ -28,6 +28,7 @@ public class Pregunta {
     @OneToMany(mappedBy = "pregunta")
     private List<RespuestaPregunta> respuestas;
 
+
     public List<RespuestaPregunta> getRespuestas() {
         return respuestas;
     }

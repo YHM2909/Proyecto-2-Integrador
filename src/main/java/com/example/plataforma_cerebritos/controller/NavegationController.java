@@ -36,6 +36,11 @@ public class NavegationController {
         return "dashboard";
     }
 
+    @GetMapping("/simulacro")
+    public String simulacro(Model model) {
+        return "simulacro";
+    }
+
     @GetMapping("/resultadoscurso")
     public String resultadoscurso(@RequestParam("idevaluacion") int idevaluacion, Model model) {
         // Utiliza el ID de evaluación en tu lógica de negocio
@@ -58,13 +63,18 @@ public class NavegationController {
         model.addAttribute("idalumno", idalumno);
         return "cursos";
     }
+
     @GetMapping("/detallecurso")
     public String detallecurso(@RequestParam("idalumno") String idAlumno, @RequestParam("idcurso") String idCurso, Model model) {
+        // Listar historial de examenes realizados, para ello declarar la entidad evaluacioncurso
         List<EvaluacionCurso> evaluaciones = evaluacionCursoRepository.findByidAlumnoAndIdCurso(Integer.parseInt(idAlumno), Integer.parseInt(idCurso));
+        // Declarar entidad temario del curso y su repository
         List<Temario> temarios = temarioRepository.findByIdCurso(Integer.parseInt(idCurso));
         int idCursoInt = Integer.parseInt(idCurso);
+        // Obtener los datos del curso, en este caso el nombre
         Curso curso = cursoRepository.findCursoByIdCurso(idCursoInt);
         String nombreCurso = curso.getNombre();
+        // Enviamos todos esos datos mediante el model.addAttributte
         model.addAttribute("idalumno", idAlumno);
         model.addAttribute("idcurso", idCurso);
         model.addAttribute("temarios", temarios);

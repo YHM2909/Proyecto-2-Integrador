@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         return minutosFormateados + ":" + segundosFormateados;
     }
-
     // Función para actualizar el tiempo restante en el span
     function actualizarTiempoRestante() {
         document.getElementById("tiempo_restante").innerText = formatearTiempoRestante();
@@ -24,20 +23,20 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(intervaloTiempo);
         }
     }
-
     // Actualizar el tiempo restante inicial
     actualizarTiempoRestante();
-
     // Intervalo para actualizar el tiempo restante cada segundo (1000 milisegundos)
     var intervaloTiempo = setInterval(actualizarTiempoRestante, 1000);
-
     var nombreEstudiante = sessionStorage.getItem('nombre');
     document.getElementById("nombre_estudiante").innerText = nombreEstudiante;
 
+
+    // ------------------------COMIENZA LA CUARTA ETAPA--------------------------------
     document.getElementById("terminar_examen").addEventListener("click", function() {
+      // Declaramos nuestra variable respuestas
       var respuestas = [];
 
-      // Recorrer todas las preguntas
+      // Recorrer todas las preguntas, recorremos todos los contenedores de preguntas
       document.querySelectorAll(".pregunta").forEach(function(pregunta) {
         var preguntaId = pregunta.querySelector(".idpregunta").value;
         var idcurso = document.getElementById("idcurso").value;
@@ -45,7 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Obtener la respuesta seleccionada para la pregunta actual
         var respuestaSeleccionada = pregunta.querySelector("input[type='radio']:checked");
         if (respuestaSeleccionada) {
+          // Obtenemos el id de la respuesta seleccionada
           var respuestaId = respuestaSeleccionada.id.split("-")[2];
+          // Obtenemos el valor de la respuesta seleccionada, nos servira para saber si se selecciono la respuesta correcta
+          // o incorrecta
           var respuestaValor = respuestaSeleccionada.value;
 
           // Agregar la pregunta y la respuesta a la lista de respuestas
@@ -57,10 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
       // Crear el objeto con los datos
-      console.log("---------------IDCURSO--------------")
-      console.log(idcurso.value)
-      console.log("---------------IDEVALUACION--------------")
-      console.log(idevaluacion.value)
       var objetoDatos = {
             idcurso:parseInt(idcurso.value) ,
             idevaluacion: parseInt(idevaluacion.value),
@@ -70,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
        var datosJSON = JSON.stringify(objetoDatos);
        console.log(datosJSON);
+       // Enviamos eso mediante fetch a nuestro controllador /resultevaluacioncurso
         fetch('/resultevaluacioncurso', {
           method: 'POST',
           headers: {
