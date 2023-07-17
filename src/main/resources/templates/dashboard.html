@@ -1,17 +1,142 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Academia cerebritos</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"
+            integrity="sha512-OD9Gn6cAUQezuljS6411uRFr84pkrCtw23Hl5TYzmGyD0YcunJIPSBDzrV8EeCiFxGWWvtJOfVo5pOgB++Jsag=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-<body th:replace="layout.html">
-<!-- Contenido específico de la página -->
-<div th:fragment="content" class="pt-10">
-    <h1 th:text="${usuario}"></h1>
-    <h1 class="text-black">Este es el contenido de mi dashboard</h1>
-    <h1>Hello from Spring Boot!</h1>
-    <p>This page is served at <span th:text="${tstamp}"></span></p>
-    <img th:src="@{/img/benefits.jpg}" alt="Imagen de beneficios">
-    <p>Otro texto de prueba</p>
+<body>
+<div class="container">
+    <div class="flex justify-center">
+        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg mx-10">
+            <h1 class="text-black font-extrabold text-2xl mx-2 my-2 ">PROMEDIO DE NOTA POR CURSO</h1>
+            <canvas id="myChart"></canvas>
+        </div>
+        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg mx-10">
+            <h1 class="text-black font-extrabold text-2xl mx-2 my-2">EXAMENES POR CURSO</h1>
+            <canvas id="myChart2" class="scale-75"></canvas>
+        </div>
+    </div>
+
+    <!--TABLA-->
+    <div class="shadow-md sm:rounded-lg mx-10 my-5">
+        <div class="flex items-center justify-end pb-4 bg-white dark:bg-gray-900">
+            <label class="sr-only m-2">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="text" id="table-search-users"
+                       class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       placeholder="Search for users">
+            </div>
+        </div>
+        <div class="">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Nombre del curso</th>
+                    <th scope="col" class="px-6 py-3"> Fecha</th>
+                    <th scope="col" class="px-6 py-3"> Nota anterior</th>
+                    <th scope="col" class="px-6 py-3"> Nota</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Aritmetica</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 15</th>
+                    <th class="px-6 py-4"> 20</th>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Algebra</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 14</th>
+                    <th class="px-6 py-4"> 19</th>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Geometria</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 16</th>
+                    <th class="px-6 py-4"> 12</th>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Lenguaje</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 16</th>
+                    <th class="px-6 py-4"> 18</th>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+<script>    
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var data = {
+            labels: ['Aritmetica', 'Algebra', 'Fisica', 'Quimica', 'Lenguaje','Geometria'],
+            datasets: [{
+                label: 'PROMEDIO DE NOTA POR CURSO',
+                data: [17,16,20,15,18,14],
+                backgroundColor: 'rgba(195, 123, 40, 0.53)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 0
+            }]
+        };
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+
+</script>
+
+<script>
+        var cursos = ['Algebra', 'Fisica', 'Quimica', 'Aritmetica', 'Lenguaje'];
+        var notas = [17,16,20,15,18];
+
+        var ctx = document.getElementById('myChart2').getContext('2d');
+
+        var myChart2 = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: cursos,
+                datasets: [{
+                    data: notas,
+                    backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(196, 178, 32, 0.47)'
+                    ]
+                }]
+            },
+            options: {
+                cutout: '80%',
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+
+
+
+</script>
 </body>
 </html>
