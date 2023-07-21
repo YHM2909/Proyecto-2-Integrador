@@ -31,44 +31,44 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("nombre_estudiante").innerText = nombreEstudiante;
 
 
-    // ------------------------COMIENZA LA CUARTA ETAPA--------------------------------
     document.getElementById("terminar_examen").addEventListener("click", function() {
-      // Declaramos nuestra variable respuestas
       var respuestas = [];
 
-      // Recorrer todas las preguntas, recorremos todos los contenedores de preguntas
       document.querySelectorAll(".pregunta").forEach(function(pregunta) {
         var preguntaId = pregunta.querySelector(".idpregunta").value;
         var idcurso = document.getElementById("idcurso").value;
+
         var idevaluacion = document.getElementById("idevaluacion").value;
-        // Obtener la respuesta seleccionada para la pregunta actual
+
         var respuestaSeleccionada = pregunta.querySelector("input[type='radio']:checked");
+
         if (respuestaSeleccionada) {
-          // Obtenemos el id de la respuesta seleccionada
+
           var respuestaId = respuestaSeleccionada.id.split("-")[2];
-          // Obtenemos el valor de la respuesta seleccionada, nos servira para saber si se selecciono la respuesta correcta
-          // o incorrecta
           var respuestaValor = respuestaSeleccionada.value;
 
-          // Agregar la pregunta y la respuesta a la lista de respuestas
           respuestas.push({
             preguntaId: preguntaId,
             respuestaId: respuestaId,
             respuestaValor: respuestaValor
           });
         }
+        else {
+           // Si no se seleccionó ninguna respuesta, agregar valores predeterminados
+           respuestas.push({
+                  preguntaId: preguntaId,
+                  respuestaId: 0,
+                  respuestaValor: 0
+           });
+        }
       });
-      // Crear el objeto con los datos
       var objetoDatos = {
             idcurso:parseInt(idcurso.value) ,
             idevaluacion: parseInt(idevaluacion.value),
             listarespuestas: respuestas
       };
-        // Imprimir el objeto en la consola
 
        var datosJSON = JSON.stringify(objetoDatos);
-       console.log(datosJSON);
-       // Enviamos eso mediante fetch a nuestro controllador /resultevaluacioncurso
         fetch('/resultevaluacioncurso', {
           method: 'POST',
           headers: {
@@ -78,21 +78,20 @@ document.addEventListener('DOMContentLoaded', function() {
         })
           .then(function(response) {
             if (response.ok) {
-              // Obtener el JSON de la respuesta
               return response.json();
             } else {
               throw new Error('Error en la solicitud');
             }
           })
+
           .then(function(data) {
-            // Obtener el ID de evaluación del objeto JSON
+
             var idevaluacion = data.idevaluacion;
 
-            // Redirigir al usuario a la vista deseada, pasando el ID de evaluación como parámetro
             window.location.href = "/resultadoscurso?idevaluacion=" + idevaluacion;
+
           })
           .catch(function(error) {
-            // Manejo de errores
             console.error(error);
           });
 });

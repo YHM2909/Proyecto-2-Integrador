@@ -57,15 +57,9 @@ public class CursosController {
         int idCurso = curso.getIdCurso();
         // Teniamos una lista de idtemarios seleccionados
         for (Integer temarioId : temariosSeleccionados) {
-            // Obtenemos la lista de preguntas relacionadas a ese temario
-
-            /// --------------------------TERCERA ETAPA--------------------------
             List<Pregunta> preguntasTemario = preguntaRepository.findByIdTemario(temarioId);
             if (!preguntasTemario.isEmpty()) {
-                // Obtenemos el tamaño de la lista de preguntas que acabamos de obtener
                 int totalPreguntas = preguntasTemario.size();
-                // Obtenemos la cantidad de preguntas seleccionadas para la evaluacion
-                // Por default siempre obtenemos 5 preguntas por temario
                 int preguntasSeleccionadasCount = Math.min(5, totalPreguntas);
                 // De esa lista total de preguntas obtenemos la cantidad de preguntas que se evaluaran de manera aleatoria
                 List<Integer> indicesAleatorios = generarIndicesAleatorios(totalPreguntas, preguntasSeleccionadasCount);
@@ -123,42 +117,33 @@ public class CursosController {
 
     @PostMapping("/resultevaluacioncurso")
     public ResponseEntity<Map<String, Object>> resultevaluacioncurso(@RequestBody DatosCursoExamen datosCursoExamen, Model model) {
-        // Obtener la lista de respuestas seleccionadas
         List<DatosCursoExamen.Respuesta> respuestas = datosCursoExamen.getListarespuestas();
-        // Obtener la cantidad de preguntas que fueron evaluadas
+
         int totalPreguntas = respuestas.size();
-        // De manera estatica que la maxima nota es 20
+
         double puntajeMaximo = 20.0;
-        // Obtener cuanto vale cada pregunta
+
         double puntajePorPregunta = puntajeMaximo / totalPreguntas;
 
-        // Redondear el puntaje por pregunta a 2 decimales
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         puntajePorPregunta = Double.parseDouble(decimalFormat.format(puntajePorPregunta));
 
         int preguntasCorrectas = 0;
-        // Tenemos que obtener cuantas preguntas fueron correctas y para ello debemos analizar el valor de las respuestas
-        // Si es valor es 1, es correcto, y si el valor es 0, es incorrecto
+
         for (DatosCursoExamen.Respuesta respuesta : respuestas) {
             if (respuesta.getRespuestaValor() == 1) {
                 preguntasCorrectas++;
             }
         }
-        // Calcular la nota, multiplicamos preguntasCorrectas * puntajePorPregunta
         double nota = preguntasCorrectas * puntajePorPregunta;
-        // Obtén la instancia de EvaluacionCurso correspondiente al id de evaluación
+
         EvaluacionCurso evaluacionCurso = evaluacionCursoRepository.findById(datosCursoExamen.getIdevaluacion()).orElse(null);
         if (evaluacionCurso != null) {
-            // Actualiza los campos nota y fecha de la instancia
             evaluacionCurso.setNota(nota);
             evaluacionCurso.setFecha(LocalDateTime.now());
 
-            // Guarda la instancia actualizada en la base de datos
             evaluacionCursoRepository.save(evaluacionCurso);
-            // Inserta una fila en la tabla resultadopreguntacurso por cada resultado de pregunta
-            // Recorrer todas las respuestas
             for (DatosCursoExamen.Respuesta respuesta : respuestas) {
-                // Declaramos la instancia ResultadoPreguntaCurso
                 ResultadoPreguntaCurso resultadoPreguntaCurso = new ResultadoPreguntaCurso();
                 resultadoPreguntaCurso.setIdEvaluacionCurso(evaluacionCurso.getId());
                 resultadoPreguntaCurso.setIdPregunta(respuesta.getPreguntaId());
@@ -168,14 +153,27 @@ public class CursosController {
                     resultadoPreguntaCurso.setCalificacion(0);
                 }
                 resultadoPreguntaCurso.setEstado(respuesta.getRespuestaValor());
-                // Creamos la fila con los datos del resultado de la pregunta curso
+
                 resultadoPreguntaCursoRepository.save(resultadoPreguntaCurso);
             }
         }
         Map<String, Object> response = new HashMap<>();
-        // Devolver el JSON en la respuesta, con el idevaluacion que se ha realizado
         response.put("idevaluacion", evaluacionCurso.getId());
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/datospregunta")
+    @ResponseBody
+    public ResponseEntity<PreguntaDTO> datospregunta(@RequestParam("idpregunta") Integer idpregunta) {
+        Pregunta pregunta = preguntaRepository.findById(idpregunta).orElse(null);
+        if (pregunta != null) {
+            PreguntaDTO preguntaDTO = new PreguntaDTO();
+            preguntaDTO.setImagenRespuesta(pregunta.getImagenRespuesta());
+            preguntaDTO.setDescripcion(pregunta.getDescripcion());
+            return ResponseEntity.ok(preguntaDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

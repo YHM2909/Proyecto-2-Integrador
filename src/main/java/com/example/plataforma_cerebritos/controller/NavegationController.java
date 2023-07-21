@@ -15,6 +15,8 @@ public class NavegationController {
     @Autowired
     private CursoGrupoRepository cursoGrupoRepository;
     @Autowired
+    private EvaluacionSimulacroRepository evaluacionSimulacroRepository;
+    @Autowired
     private EvaluacionCursoRepository evaluacionCursoRepository;
     @Autowired
     private TemarioRepository temarioRepository;
@@ -41,17 +43,27 @@ public class NavegationController {
         return "simulacro";
     }
 
-    @GetMapping("/resultadoscurso")
-    public String resultadoscurso(@RequestParam("idevaluacion") int idevaluacion, Model model) {
-        // Utiliza el ID de evaluación en tu lógica de negocio
-        System.out.println("ID de evaluación: " + idevaluacion);
-        // Obtén la lista de resultados de preguntas para el idevaluacion
-        List<ResultadoPreguntaCurso> resultados = resultadoPreguntaCursoRepository.findByIdEvaluacionCurso(idevaluacion);
-        // Agrega la lista de resultados a tu modelo
-        model.addAttribute("resultados", resultados);
-        return "resultadoscurso";
+    @GetMapping("/detallesimulacro")
+    public String detallesimulacro(@RequestParam("idalumno") String idalumno,
+                                   @RequestParam("iduniversidad") String idUniversidad, Model model) {
+        List<EvaluacionSimulacro> evaluacionesSimulacro = evaluacionSimulacroRepository.findByidAlumno(Integer.parseInt(idalumno));
+        List<CursoDto> cursos = cursoGrupoRepository.findCursosByUniversidad(Integer.parseInt(idUniversidad));
+        // Obtener los nombres de los cursos del CursoRepository
+        model.addAttribute("cursos", cursos);
+        model.addAttribute("evaluacionesSimulacro", evaluacionesSimulacro);
+        return "detallesimulacro";
     }
 
+    @GetMapping("/resultadoscurso")
+    public String resultadoscurso(@RequestParam("idevaluacion") int idevaluacion, Model model) {
+        System.out.println("ID de evaluación: " + idevaluacion);
+
+        List<ResultadoPreguntaCurso> resultados = resultadoPreguntaCursoRepository.findByIdEvaluacionCurso(idevaluacion);
+
+        model.addAttribute("resultados", resultados);
+
+        return "resultadoscurso";
+    }
 
     @GetMapping("/cursos")
     public String cursos(@RequestParam("idalumno") String idalumno,
@@ -68,6 +80,9 @@ public class NavegationController {
     public String detallecurso(@RequestParam("idalumno") String idAlumno, @RequestParam("idcurso") String idCurso, Model model) {
         // Listar historial de examenes realizados, para ello declarar la entidad evaluacioncurso
         List<EvaluacionCurso> evaluaciones = evaluacionCursoRepository.findByidAlumnoAndIdCurso(Integer.parseInt(idAlumno), Integer.parseInt(idCurso));
+        // Limitar las evaluaciones a los 12 registros más recientes
+        int startIndex = Math.max(evaluaciones.size() - 12, 0);
+        List<EvaluacionCurso> ultimasEvaluaciones = evaluaciones.subList(startIndex, evaluaciones.size());
         // Declarar entidad temario del curso y su repository
         List<Temario> temarios = temarioRepository.findByIdCurso(Integer.parseInt(idCurso));
         int idCursoInt = Integer.parseInt(idCurso);
@@ -78,9 +93,8 @@ public class NavegationController {
         model.addAttribute("idalumno", idAlumno);
         model.addAttribute("idcurso", idCurso);
         model.addAttribute("temarios", temarios);
-        model.addAttribute("evaluaciones", evaluaciones);
+        model.addAttribute("evaluaciones", ultimasEvaluaciones);
         model.addAttribute("nombreCurso", nombreCurso);
         return "detallecurso";
     }
-
 }

@@ -1,107 +1,117 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Academia cerebritos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" />
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>    <!-- Chart - Graficos dinamicos -->
 </head>
 <body th:replace="layout.html">
 <!-- Contenido específico de la página -->
 <div th:fragment="content" class="pt-10">
-    <h1 class="text-gray-700 font-extrabold text-lg">Dashboard</h1>
-    <div class="p-4">
-        <div class="container-dashboard">
-            <div class="">
-                <!-- Charts -->
-                <div class="mb-8 container-charts">
-                    <div class="border p-4">
-                        <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                            Resultados por mes
-                        </h4>
-                        <canvas id="mychartlinechart"></canvas>
-                    </div>
-                    <div class="border p-4">
-                        <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-                            Resultados por cursos
-                        </h4>
-                        <canvas id="barrahorizontal"></canvas>
-                    </div>
-                </div>
-            </div>
+    <div class="flex justify-center">
+        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg mx-10 p-5">
+            <h1 class="text-black font-extrabold text-2xl mx-2 my-2 ">PROMEDIO DE NOTA POR CURSO</h1>
+            <canvas id="myChart" class="min-w-[10rem]"></canvas>
+        </div>
+        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg mx-10 p-5">
+            <h1 class="text-black font-extrabold text-2xl mx-2 my-2">EXAMENES POR CURSO</h1>
+            <canvas id="myChart2" class="min-w-[10rem] scale-75"></canvas>
         </div>
     </div>
-</div>
-<script>
-    function ActualizarGraficos() {
-    // Datos de ejemplo para los gráficos
-    const eventosAnual = [1200, 1500, 1800, 2100, 2400, 2700, 3000, 3300, 3600, 3900, 4200, 4500];
-    const clientesEvento = [
-        { cliente: "Cliente A", eventos: 500 },
-        { cliente: "Cliente B", eventos: 700 },
-        { cliente: "Cliente C", eventos: 900 },
-        { cliente: "Cliente D", eventos: 1100 },
-        { cliente: "Cliente E", eventos: 1300 },
-    ];
+    <!--TABLA-->
+    <div class="p-8 mt-15">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Nombre del curso</th>
+                <th scope="col" class="px-6 py-3"> Fecha</th>
+                <th scope="col" class="px-6 py-3"> Nota anterior</th>
+                <th scope="col" class="px-6 py-3"> Nota</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th class="px-6 py-4"> Aritmetica</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 15</th>
+                <th class="px-6 py-4"> 20</th>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th class="px-6 py-4"> Algebra</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 14</th>
+                <th class="px-6 py-4"> 19</th>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th class="px-6 py-4"> Geometria</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 16</th>
+                <th class="px-6 py-4"> 12</th>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th class="px-6 py-4"> Lenguaje</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 16</th>
+                <th class="px-6 py-4"> 18</th>
+            </tr>
 
-    // Inicializamos el gráfico de Lines Eventos por mes
-    const xValues = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
-    const yValues = eventosAnual;
-
-    new Chart("mychartlinechart", {
-        type: "line",
-        data: {
-            labels: xValues,
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var data = {
+            labels: ['Aritmetica', 'Algebra', 'Fisica', 'Quimica', 'Lenguaje','Geometria'],
             datasets: [{
-                fill: false,
-                lineTension: 0,
-                backgroundColor: "#9B59B6",
-                borderColor: "#D2B4DE",
-                data: yValues,
-                borderWidth: 5,
+                label: 'PROMEDIO DE NOTA POR CURSO',
+                data: [17,16,20,15,18,14],
+                backgroundColor: 'rgba(195, 123, 40, 0.53)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 0
             }]
-        },
-        options: {
-            legend: { display: false },
+        };
+        var options = {
             scales: {
-                yAxes: [{ ticks: { min: 5000, max: 20000 } }],
+                y: {
+                    beginAtZero: true
+                }
             }
-        }
-    });
+        };
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
 
-    // Inicializamos el gráfico de barras horizontales Eventos por cliente
-    const xValuesH = clientesEvento.map(objeto => objeto.cliente);
-    const yValuesH = clientesEvento.map(objeto => objeto.eventos);
-    const barColors = ["#EC7063", "#5DADE2", "#76D7C4", "#FAD7A0", "#FAD7A0"];
-
-    // Establecer el grosor máximo para barras con un solo valor
-    const containerWidth = document.getElementById("barrahorizontal").offsetWidth;
-    const maxBarThickness = yValuesH.length <= 1 ? containerWidth / 10 : undefined;
-
-    new Chart("barrahorizontal", {
-        type: "horizontalBar",
-        data: {
-            labels: xValuesH,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValuesH,
-                barThickness: maxBarThickness
-            }]
-        },
-        options: {
-            legend: { display: false },
-            title: { display: true },
-            scales: {
-                xAxes: [{
-                    ticks: { beginAtZero: true },
-                    barPercentage: 1.5
-                }]
-            }
-        }
-    });
-}
-document.addEventListener("DOMContentLoaded", function () {
-    ActualizarGraficos();
-});
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
+    <script>
+        var cursos = ['Algebra', 'Fisica', 'Quimica', 'Aritmetica', 'Lenguaje'];
+        var notas = [17,16,20,15,18];
+
+        var ctx = document.getElementById('myChart2').getContext('2d');
+
+        var myChart2 = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: cursos,
+                datasets: [{
+                    data: notas,
+                    backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(196, 178, 32, 0.47)'
+                    ]
+                }]
+            },
+            options: {
+                cutout: '80%',
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+</script>
+</div>
+
 </body>
 </html>

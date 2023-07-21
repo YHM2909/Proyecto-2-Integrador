@@ -32,7 +32,7 @@
                     <input type="hidden" th:value="${pregunta.id}" class="idpregunta">
                     <h2 th:text="${pregunta.descripcion}" th:id="${pregunta.id}"></h2>
                     <!-- Si tenemos una imagen la mostramos, sino se encuentra una imagen se obvia esta etiqueta img -->
-                    <img th:if="${pregunta.imagenPregunta != null and pregunta.imagenPregunta != ''}" th:src="@{'/iconos/preguntas/' + ${pregunta.imagenPregunta}}" alt="">
+                    <img th:if="${pregunta.imagenPregunta != null and pregunta.imagenPregunta != ''}" th:src="@{'/img/' + ${pregunta.imagenPregunta}}" alt="">
                     <ul class="mt-3">
                         <li th:each="respuesta : ${pregunta.respuestas}">
                             <input type="radio" th:id="'respuesta-' + ${pregunta.id} + '-' + ${respuesta.id}" th:name="'pregunta-' + ${pregunta.id}" th:value="${respuesta.estado}">
