@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Academia cerebritos</title>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <div class="grid gap-4 grid-cols-4">
+        <!-- Iterar sobre la lista de nombresCursos -->
+        <a th:each="curso : ${cursos}" th:href="@{/detallecurso(idcurso=${curso.id}, idalumno=${idalumno})}" class="no-underline">
+            <div class="curso cursor-pointer flex items-center gap-3 p-5 font-bold text-gray-600 rounded-xl justify-between bg-white my-3 shadow-md hover:bg-gray-50">
+                <!-- Mostrar el nombre del curso -->
+                <div class="flex items-center gap-3">
+                    <img th:src="@{/img/libro-abierto.png}" class="w-10" alt="">
+                    <span th:text="${curso.nombre}"></span>
+                </div>
+                <div>
+                    <i class="fa-solid fa-angle-right"></i>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+</body>
+</html>

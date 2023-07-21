@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>
+    <script th:src="@{/js/realizarsimulacro.js}"></script>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <!-- Recorre la lista de CursoGrupo -->
+    <div class="flex gap-3 w-full">
+        <div class="min-w-[20rem] max-h-[20rem] bg-white p-5 rounded-xl">
+            <p> <span>Nombre</span> </p>
+        </div>
+        <div class="bg-white p-5 rounded-xl w-full">
+            <div th:each="cursoGrupo : ${cursoGrupos}" class="mb-8">
+                <input type="hidden" th:value="${idSimulacroEvaluacion}" class="idevaluacionsimulacro">
+                <h2 class="text-lg font-bold mb-4">Curso Grupo ID: <span th:text="${cursoGrupo.idCurso}"></span></h2>
+                <!-- Recorre la lista de preguntas para cada CursoGrupo -->
+                <div class="pregunta" th:each="pregunta, iterStat : ${cursoGrupo.preguntas}">
+                    <input type="hidden" th:value="${cursoGrupo.idCurso}" class="idcurso">
+                    <h2 class="descripcion_pregunta text-xl font-extrabold py-2 text-gray-400">Pregunta <span th:text="${iterStat.count}" class="numero_pregunta"></span></h2>
+                    <!-- Creamos inputs que contienen el idpregunta que estaran ocultos -->
+                    <input type="hidden" th:value="${pregunta.id}" class="idpregunta">
+                    <h2 th:text="${pregunta.descripcion}" th:id="${pregunta.id}"></h2>
+                    <!-- Si tenemos una imagen la mostramos, sino se encuentra una imagen se obvia esta etiqueta img -->
+                    <img th:if="${pregunta.imagenPregunta != null and pregunta.imagenPregunta != ''}" th:src="@{'/img/' + ${pregunta.imagenPregunta}}" alt="">
+                    <ul class="mt-3">
+                        <li th:each="respuesta : ${pregunta.respuestas}">
+                            <input type="radio" th:id="'respuesta-' + ${pregunta.id} + '-' + ${respuesta.id}" th:name="'pregunta-' + ${pregunta.id}" th:value="${respuesta.estado}">
+                            <label th:for="'respuesta-' + ${pregunta.id} + '-' + ${respuesta.id}" th:text="${respuesta.descripcion}"></label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex justify-end">
+                <button class="bg-orange-400 px-3 py-2 rounded-xl text-white" id="terminar_examen">Terminar</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
