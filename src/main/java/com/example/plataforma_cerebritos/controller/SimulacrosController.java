@@ -64,7 +64,9 @@ public class SimulacrosController {
         // Iterar sobre la lista de CursoGrupo y buscar las preguntas para cada idCurso
         for (CursoGrupo cursoGrupo : cursoGrupos) {
             int idCurso = cursoGrupo.getIdCurso();
+            // Obtenemos la cantidad preguntas que le pertenecen a cada curso
             int cantidadPreguntas = cursoGrupo.getCantidadPreguntas();
+            // Obtener todas las preguntas que le pertenecen al curso
             List<Pregunta> preguntas = preguntaRepository.findAllByIdCurso(idCurso);
 
             // Mezclar al azar el orden de las preguntas
@@ -103,14 +105,12 @@ public class SimulacrosController {
     public ResponseEntity<Map<String, Object>> recopilar_respuestas_simulacro(@RequestBody RespuestasSimulacro respuestasSimulacro, Model model) {
         List<RespuestasSimulacro.Respuesta> respuestas = respuestasSimulacro.getListarespuestas();
         int idevaluacionsimulacro = respuestasSimulacro.getIdevaluacionsimulacro();
-
+        System.out.println(idevaluacionsimulacro);
         int totalPreguntas = respuestas.size();
         double puntajeMaximo = 2000.0;
         double puntajePorPregunta = puntajeMaximo / totalPreguntas;
-
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         puntajePorPregunta = Double.parseDouble(decimalFormat.format(puntajePorPregunta));
-
         int preguntasCorrectas = 0;
 
         for (RespuestasSimulacro.Respuesta respuesta : respuestas) {
@@ -118,7 +118,6 @@ public class SimulacrosController {
                 preguntasCorrectas++;
             }
         }
-
         double nota = preguntasCorrectas * puntajePorPregunta;
 
         EvaluacionSimulacro evaluacionSimulacro = evaluacionSimulacroRepository.findById(idevaluacionsimulacro).orElse(null);
@@ -167,7 +166,6 @@ public class SimulacrosController {
                 cursoResultadoSimulacroRepository.save(resultadoSimulacro);
             }
         }
-
         Map<String, Object> response = new HashMap<>();
         response.put("idevaluacionsimulacro", idevaluacionsimulacro);
         return ResponseEntity.ok(response);

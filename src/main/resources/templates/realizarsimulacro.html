@@ -15,7 +15,7 @@
         </div>
         <div class="bg-white p-5 rounded-xl w-full">
             <div th:each="cursoGrupo : ${cursoGrupos}" class="mb-8">
-                <input type="hidden" th:value="${idSimulacroEvaluacion}" class="idevaluacionsimulacro">
+                <input type="hidden" th:value="${idSimulacroEvaluacion}" class="idevaluacionsimulacro" id="idevaluacionsimulacro">
                 <h2 class="text-lg font-bold mb-4">Curso Grupo ID: <span th:text="${cursoGrupo.idCurso}"></span></h2>
                 <!-- Recorre la lista de preguntas para cada CursoGrupo -->
                 <div class="pregunta" th:each="pregunta, iterStat : ${cursoGrupo.preguntas}">

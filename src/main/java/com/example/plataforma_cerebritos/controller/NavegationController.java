@@ -22,6 +22,9 @@ public class NavegationController {
     private TemarioRepository temarioRepository;
     @Autowired
     private ResultadoPreguntaCursoRepository resultadoPreguntaCursoRepository;
+
+    @Autowired
+    private ResultadoPreguntaSimulacroRepository resultadoPreguntaSimulacroRepository;
     @Autowired
     private CursoRepository cursoRepository;
     @GetMapping("/")
@@ -36,11 +39,6 @@ public class NavegationController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         return "dashboard";
-    }
-
-    @GetMapping("/simulacro")
-    public String simulacro(Model model) {
-        return "simulacro";
     }
 
     @GetMapping("/detallesimulacro")
@@ -96,5 +94,13 @@ public class NavegationController {
         model.addAttribute("evaluaciones", ultimasEvaluaciones);
         model.addAttribute("nombreCurso", nombreCurso);
         return "detallecurso";
+    }
+
+    @GetMapping("/resultados_simulacro")
+    public String resultados_simulacro(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro, Model model) {
+
+        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByIdevaluacionsimulacro(idevaluacionsimulacro);
+        model.addAttribute("resultadospreguntasimulacro", resultados);
+        return "resultados_simulacro";
     }
 }

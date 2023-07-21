@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <span class="text-3xl font-extrabold pb-3 text-gray-700">Resultados evaluación simulacro</span>
+    <div class="flex w-full justify-between gap-5">
+        <div class="mt-8 p-5 rounded-xl bg-white w-full">
+            <div th:each="resultado, iterStat : ${resultadospreguntasimulacro}"
+                 class="resultados text-white px-5 rounded-xl mb-4 flex justify-between items-center py-1"
+                 th:classappend="${resultado.estado == 0} ? 'bg-[#FFBFBE]' : 'bg-[#BFFFBE]'">
+                <div>
+                    <h2 class="descripcion_pregunta text-sm font-extrabold text-gray-500">Pregunta
+                        <span th:text="${iterStat.count}" class="numero_pregunta"></span>
+                    </h2>
+                    <p class="text-gray-500 font-sm text-sm">Calificación <span th:text="${resultado.calificacion}"></span></p>
+                </div>
+                <div class="p-2 rounded-full flex items-center gap-3">
+                    <button class="btn_versolucion py-1 px-3 rounded-xl bg-indigo-300 text-sm" onclick="mostrarSolucion(this)" th:data-id-pregunta="${resultado.idPregunta}">Ver solución</button>
+                    <i class="fa-solid fa-arrow-down-long"></i>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 p-5 rounded-xl bg-white min-w-[18rem]">
+            <p>Alumno: <span>Juan carlos</span> </p>
+            <p>Nota: <span>15</span> </p>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
