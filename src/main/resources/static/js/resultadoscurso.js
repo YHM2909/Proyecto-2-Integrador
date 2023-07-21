@@ -17,7 +17,7 @@ function mostrarSolucion(element) {
             html: `
                 <p class="text-lg font-bold text-gray-700 mb-5">Resolución</p>
                 <p class="text-sm text-gray-700 mb-5">${data.descripcion}</p>
-                <img src="/iconos/preguntas/${data.imagenRespuesta}" alt="">
+                <img src="/img/${data.imagenRespuesta}" alt="">
             `,
             showCancelButton: false,
             confirmButtonText: "Aceptar"
