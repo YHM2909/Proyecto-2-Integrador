@@ -1,63 +1,86 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Academia cerebritos</title>    <!-- Chart - Graficos dinamicos -->
+    <title>Title</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.js"
+            integrity="sha512-OD9Gn6cAUQezuljS6411uRFr84pkrCtw23Hl5TYzmGyD0YcunJIPSBDzrV8EeCiFxGWWvtJOfVo5pOgB++Jsag=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-<body th:replace="layout.html">
-<!-- Contenido específico de la página -->
-<div th:fragment="content" class="pt-10">
+<body>
+<div class="container">
     <div class="flex justify-center">
-        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg mx-10 p-5">
+        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg mx-10">
             <h1 class="text-black font-extrabold text-2xl mx-2 my-2 ">PROMEDIO DE NOTA POR CURSO</h1>
-            <canvas id="myChart" class="min-w-[10rem]"></canvas>
+            <canvas id="myChart"></canvas>
         </div>
-        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg mx-10 p-5">
+        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg mx-10">
             <h1 class="text-black font-extrabold text-2xl mx-2 my-2">EXAMENES POR CURSO</h1>
-            <canvas id="myChart2" class="min-w-[10rem] scale-75"></canvas>
+            <canvas id="myChart2" class="scale-75"></canvas>
         </div>
     </div>
-    <!--TABLA-->
-    <div class="p-8 mt-15">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">Nombre del curso</th>
-                <th scope="col" class="px-6 py-3"> Fecha</th>
-                <th scope="col" class="px-6 py-3"> Nota anterior</th>
-                <th scope="col" class="px-6 py-3"> Nota</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th class="px-6 py-4"> Aritmetica</th>
-                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
-                <th class="px-6 py-4 "> 15</th>
-                <th class="px-6 py-4"> 20</th>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th class="px-6 py-4"> Algebra</th>
-                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
-                <th class="px-6 py-4 "> 14</th>
-                <th class="px-6 py-4"> 19</th>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th class="px-6 py-4"> Geometria</th>
-                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
-                <th class="px-6 py-4 "> 16</th>
-                <th class="px-6 py-4"> 12</th>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th class="px-6 py-4"> Lenguaje</th>
-                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
-                <th class="px-6 py-4 "> 16</th>
-                <th class="px-6 py-4"> 18</th>
-            </tr>
 
-            </tbody>
-        </table>
+    <!--TABLA-->
+    <div class="shadow-md sm:rounded-lg mx-10 my-5">
+        <div class="flex items-center justify-end pb-4 bg-white dark:bg-gray-900">
+            <label class="sr-only m-2">Search</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="text" id="table-search-users"
+                       class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                       placeholder="Search for users">
+            </div>
+        </div>
+        <div class="">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Nombre del curso</th>
+                    <th scope="col" class="px-6 py-3"> Fecha</th>
+                    <th scope="col" class="px-6 py-3"> Nota anterior</th>
+                    <th scope="col" class="px-6 py-3"> Nota</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Aritmetica</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 15</th>
+                    <th class="px-6 py-4"> 20</th>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Algebra</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 14</th>
+                    <th class="px-6 py-4"> 19</th>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Geometria</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 16</th>
+                    <th class="px-6 py-4"> 12</th>
+                </tr>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th class="px-6 py-4"> Lenguaje</th>
+                    <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                    <th class="px-6 py-4 "> 16</th>
+                    <th class="px-6 py-4"> 18</th>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script>
+</div>
+<script>    
         var ctx = document.getElementById('myChart').getContext('2d');
         var data = {
             labels: ['Aritmetica', 'Algebra', 'Fisica', 'Quimica', 'Lenguaje','Geometria'],
@@ -84,7 +107,7 @@
 
 </script>
 
-    <script>
+<script>
         var cursos = ['Algebra', 'Fisica', 'Quimica', 'Aritmetica', 'Lenguaje'];
         var notas = [17,16,20,15,18];
 
@@ -110,8 +133,10 @@
                 maintainAspectRatio: false
             }
         });
-</script>
-</div>
 
+
+
+
+</script>
 </body>
 </html>
