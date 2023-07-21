@@ -13,4 +13,6 @@ import java.util.List;
 public interface CursoGrupoRepository extends JpaRepository<CursoGrupo, Integer> {
     @Query("SELECT new com.example.plataforma_cerebritos.models.CursoDto(cg.idCurso, c.nombre) FROM CursoGrupo cg INNER JOIN Curso c ON cg.idCurso = c.id WHERE cg.idUniversidad = :idUniversidad")
     List<CursoDto> findCursosByUniversidad(@Param("idUniversidad") Integer idUniversidad);
+
+    List<CursoGrupo> findAllByIdUniversidad(Integer idUniversidad);
 }

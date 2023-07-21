@@ -5,6 +5,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Academia cerebritos</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 </head>
 <body>
 
@@ -27,7 +28,7 @@
             <div class="flex items-center">
                 <div class="flex items-center ml-3">
                     <div class="mr-5">
-                        <span id="usuario"></span>
+                       <span id="usuario"></span>
                     </div>
                     <div>
                         <button type="button" data-toggle="logout-modal" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300" aria-expanded="false">
@@ -96,7 +97,7 @@
     function redirectToSimulacro() {
         var idalumno = sessionStorage.getItem("idalumno");
         var iduniversidad = sessionStorage.getItem("iduniversidad");
-        window.location.href = "/simulacro?idalumno=" + idalumno + "&iduniversidad=" + iduniversidad;
+        window.location.href = "/detallesimulacro?idalumno=" + idalumno + "&iduniversidad=" + iduniversidad;
     }
 
     var logoutButton = document.querySelector('[data-toggle="logout-modal"]');

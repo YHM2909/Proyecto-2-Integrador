@@ -2,6 +2,8 @@ package com.example.plataforma_cerebritos.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "cursogrupo")
 public class CursoGrupo {
@@ -18,6 +20,8 @@ public class CursoGrupo {
     @Column(name = "cantidadpreguntas")
     private Integer cantidadPreguntas;
 
+    @Transient // Esta anotación indica que este atributo no se mapea en la base de datos
+    private List<Pregunta> preguntas;
     public Integer getId() {
         return id;
     }
@@ -38,6 +42,14 @@ public class CursoGrupo {
         return idUniversidad;
     }
 
+
+    public List<Pregunta> getPreguntas() {
+        return preguntas;
+    }
+
+    public void setPreguntas(List<Pregunta> preguntas) {
+        this.preguntas = preguntas;
+    }
     public void setIdUniversidad(Integer idUniversidad) {
         this.idUniversidad = idUniversidad;
     }
