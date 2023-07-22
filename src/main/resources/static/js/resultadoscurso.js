@@ -27,3 +27,9 @@ function mostrarSolucion(element) {
         console.error('Error al obtener los datos de la pregunta:', error);
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var nombreEstudiante = sessionStorage.getItem('nombre');
+    document.getElementById("nombre_estudiante").innerText = nombreEstudiante;
+})
+

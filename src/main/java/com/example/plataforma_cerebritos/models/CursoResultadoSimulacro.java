@@ -12,6 +12,18 @@ public class CursoResultadoSimulacro {
     @Column(name = "id_curso")
     private int idCurso;
 
+    @ManyToOne
+    @JoinColumn(name = "id_curso", insertable = false, updatable = false)
+    private Curso curso;
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
     @Column(name = "id_evaluacionsimulacro")
     private int idEvaluacionSimulacro;
 

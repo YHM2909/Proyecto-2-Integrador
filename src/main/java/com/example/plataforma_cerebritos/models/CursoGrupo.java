@@ -22,6 +22,19 @@ public class CursoGrupo {
 
     @Transient // Esta anotación indica que este atributo no se mapea en la base de datos
     private List<Pregunta> preguntas;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_curso", referencedColumnName = "id_curso", insertable = false, updatable = false)
+    private Curso curso;
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
     public Integer getId() {
         return id;
     }

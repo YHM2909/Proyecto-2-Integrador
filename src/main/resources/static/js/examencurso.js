@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (tiempoRestante < 0) {
             // Aquí puedes agregar lógica adicional cuando se acabe el tiempo
+            var terminarExamenButton = document.getElementById("terminar_examen");
+            terminarExamenButton.click();
             clearInterval(intervaloTiempo);
         }
     }

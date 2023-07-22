@@ -49,13 +49,13 @@ public class NavegationController {
     public String detallesimulacro(@RequestParam("idalumno") String idalumno,
                                    @RequestParam("iduniversidad") String idUniversidad, Model model) {
         List<EvaluacionSimulacro> evaluacionesSimulacro = evaluacionSimulacroRepository.findByidAlumno(Integer.parseInt(idalumno));
-
         // Limitar las evaluaciones a los 12 registros más recientes
         int startIndex = Math.max(evaluacionesSimulacro.size() - 12, 0);
         List<EvaluacionSimulacro> UltimasevaluacionesSimulacro = evaluacionesSimulacro.subList(startIndex, evaluacionesSimulacro.size());
         List<CursoDto> cursos = cursoGrupoRepository.findCursosByUniversidad(Integer.parseInt(idUniversidad));
         // Obtener los nombres de los cursos del CursoRepository
         model.addAttribute("cursos", cursos);
+        model.addAttribute("idalumno", idalumno);
         model.addAttribute("evaluacionesSimulacro", UltimasevaluacionesSimulacro);
         return "detallesimulacro";
     }
@@ -64,10 +64,20 @@ public class NavegationController {
     public String resultadoscurso(@RequestParam("idevaluacion") int idevaluacion, Model model) {
         System.out.println("ID de evaluación: " + idevaluacion);
 
-        List<ResultadoPreguntaCurso> resultados = resultadoPreguntaCursoRepository.findByIdEvaluacionCurso(idevaluacion);
+        Optional<EvaluacionCurso> evaluacionOptional = evaluacionCursoRepository.findById(idevaluacion);
+        if (evaluacionOptional.isPresent()) {
+            EvaluacionCurso evaluacion = evaluacionOptional.get();
+            double nota = evaluacion.getNota();
+            LocalDateTime fecha = evaluacion.getFecha();
 
-        model.addAttribute("resultados", resultados);
-
+            List<ResultadoPreguntaCurso> resultados = resultadoPreguntaCursoRepository.findByIdEvaluacionCurso(idevaluacion);
+            model.addAttribute("resultados", resultados);
+            model.addAttribute("nota", nota);
+            model.addAttribute("fecha", fecha);
+        } else {
+            // Manejar el caso en que la evaluación no exista
+            // Por ejemplo, redireccionar a una página de error o mostrar un mensaje de error en la vista.
+        }
         return "resultadoscurso";
     }
 

@@ -1,6 +1,7 @@
 package com.example.plataforma_cerebritos.controller;
 
 import com.example.plataforma_cerebritos.models.*;
+import com.example.plataforma_cerebritos.models.simulacros.EvaluacionSimulacroDTO;
 import com.example.plataforma_cerebritos.models.simulacros.ResultadoCursoSimulacro;
 import com.example.plataforma_cerebritos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static java.lang.Integer.parseInt;
@@ -32,8 +35,51 @@ public class SimulacrosController {
 
     @Autowired
     private ResultadoPreguntaSimulacroRepository resultadoPreguntaSimulacroRepository;
+    private String getMaxCurso(List<CursoResultadoSimulacro> resultadosSimulacroCursos, boolean isCorrectas) {
+        int maxPreguntas = isCorrectas ? 0 : Integer.MAX_VALUE;
+        String maxCurso = null;
+
+        for (CursoResultadoSimulacro resultadoscursos : resultadosSimulacroCursos) {
+            int preguntas = isCorrectas ? resultadoscursos.getpCorrectas() : resultadoscursos.getpIncorrectas();
+            if (preguntas > maxPreguntas) {
+                maxPreguntas = preguntas;
+                maxCurso = resultadoscursos.getCurso().getNombre();
+            }
+        }
+
+        return maxCurso;
+    }
     @GetMapping("/reportesimulacros")
-    public String reportesimulacros(Model model) {
+    public String reportesimulacros(@RequestParam("idalumno") int idalumno, Model model) {
+        List<EvaluacionSimulacro> evaluacionesSimulacro = evaluacionSimulacroRepository.findByidAlumno(idalumno);
+        List<EvaluacionSimulacroDTO> evaluacionesDTO = new ArrayList<>();
+
+        for (EvaluacionSimulacro evaluacion : evaluacionesSimulacro) {
+            int pcorrectas = 0;
+            int pincorrectas = 0;
+            List<CursoResultadoSimulacro> resultadosSimulacroCursos = cursoResultadoSimulacroRepository.findByIdEvaluacionSimulacro(evaluacion.getId());
+
+            for (CursoResultadoSimulacro resultadoscursos : resultadosSimulacroCursos) {
+                pcorrectas += resultadoscursos.getpCorrectas();
+                pincorrectas += resultadoscursos.getpIncorrectas();
+            }
+
+            // Obtener los cursos con el máximo de preguntas correctas e incorrectas
+            String maxCursoCorrectas = getMaxCurso(resultadosSimulacroCursos, true);
+            String maxCursoIncorrectas = getMaxCurso(resultadosSimulacroCursos, false);
+
+            EvaluacionSimulacroDTO evaluacionDTO = new EvaluacionSimulacroDTO();
+            evaluacionDTO.setFecha(evaluacion.getFecha());
+            evaluacionDTO.setNota(evaluacion.getNota());
+            evaluacionDTO.setPcorrectas(pcorrectas);
+            evaluacionDTO.setPincorrectas(pincorrectas);
+            evaluacionDTO.setCursoRendimientoPositivo(maxCursoCorrectas);
+            evaluacionDTO.setCursoRendimientoNegativo(maxCursoIncorrectas);
+            evaluacionesDTO.add(evaluacionDTO);
+        }
+
+        model.addAttribute("evaluacionesDTO", evaluacionesDTO);
+        model.addAttribute("idalumno", idalumno);
         return "reportesimulacros";
     }
 
@@ -144,12 +190,14 @@ public class SimulacrosController {
                 preguntas = preguntas.subList(0, cantidadPreguntas);
             }
 
-            // Para cada pregunta, obtener la lista de respuestas
             for (Pregunta pregunta : preguntas) {
                 List<RespuestaPregunta> respuestas = respuestaPreguntaRepository.findByPreguntaId(pregunta.getId());
                 pregunta.setRespuestas(respuestas);
             }
 
+            // Obtener el curso correspondiente y establecerlo en cursoGrupo
+            Curso curso = cursoRepository.findById(idCurso).orElse(null);
+            cursoGrupo.setCurso(curso);
             // Asignar la lista de preguntas al atributo 'preguntas' de CursoGrupo
             cursoGrupo.setPreguntas(preguntas);
         }
@@ -161,9 +209,16 @@ public class SimulacrosController {
         evaluacionSimulacro.setFecha(null); // Establece la fecha actual
         evaluacionSimulacroRepository.save(evaluacionSimulacro);
         Integer idSimulacroEvaluacion = evaluacionSimulacro.getId();
+
+        LocalTime horaActual = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss"); // Formato de hora:minuto:segundo
+        String horaActualFormateada = horaActual.format(formatter);
         // Agregar la lista de CursoGrupo al modelo para ser usada en la vista
         model.addAttribute("cursoGrupos", cursoGrupos);
         model.addAttribute("idSimulacroEvaluacion", idSimulacroEvaluacion);
+        model.addAttribute("tiempoExamen", 180);
+        model.addAttribute("horaActual", horaActualFormateada);
+        model.addAttribute("cantidadPreguntas", 100);
         return "realizarsimulacro";
     }
 
@@ -185,6 +240,7 @@ public class SimulacrosController {
             }
         }
         double nota = preguntasCorrectas * puntajePorPregunta;
+        nota = Math.round(nota * 100.0) / 100.0;
 
         EvaluacionSimulacro evaluacionSimulacro = evaluacionSimulacroRepository.findById(idevaluacionsimulacro).orElse(null);
         if (evaluacionSimulacro != null) {

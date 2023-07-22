@@ -7,20 +7,22 @@
 <body th:replace="layout.html">
 <!-- Contenido específico de la página -->
 <div th:fragment="content" class="pt-10">
-    <div class="flex justify-center">
-        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg mx-10 p-5">
-            <h1 class="text-black font-extrabold text-2xl mx-2 my-2 ">PROMEDIO DE NOTA POR CURSO</h1>
+    <div class="flex justify-center gap-5">
+        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg p-5 max-h-[35rem]">
+            <h1 class="text-gray-600 font-extrabold text-2xl mx-2 my-2 pb-5">Promedio de preguntas respondidas por curso</h1>
             <canvas id="myChart" class="min-w-[10rem]"></canvas>
         </div>
-        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg mx-10 p-5">
-            <h1 class="text-black font-extrabold text-2xl mx-2 my-2">EXAMENES POR CURSO</h1>
-            <canvas id="myChart2" class="min-w-[10rem] scale-75"></canvas>
+        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg p-5 max-h-[35rem]">
+            <h1 class="text-gray-600 font-extrabold text-2xl mx-2 my-2 pb-5">Curso con más examenes</h1>
+            <div class="w-full h-full px-10 max-h-[23rem]">
+                <canvas id="myChart2" class="min-w-[10rem]"></canvas>
+            </div>
         </div>
     </div>
     <!--TABLA-->
     <div class="p-8 mt-15">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-full text-sm text-left text-gray-500 rounded-xl">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
                 <th scope="col" class="px-6 py-3">Nombre del curso</th>
                 <th scope="col" class="px-6 py-3"> Fecha</th>
@@ -29,25 +31,25 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr class="bg-white border-b hover:bg-gray-50">
                 <th class="px-6 py-4"> Aritmetica</th>
                 <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
                 <th class="px-6 py-4 "> 15</th>
                 <th class="px-6 py-4"> 20</th>
             </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr class="bg-white border-b hover:bg-gray-50">
                 <th class="px-6 py-4"> Algebra</th>
                 <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
                 <th class="px-6 py-4 "> 14</th>
                 <th class="px-6 py-4"> 19</th>
             </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr class="bg-white border-b hover:bg-gray-50">
                 <th class="px-6 py-4"> Geometria</th>
                 <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
                 <th class="px-6 py-4 "> 16</th>
                 <th class="px-6 py-4"> 12</th>
             </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <tr class="bg-white border-b hover:bg-gray-50">
                 <th class="px-6 py-4"> Lenguaje</th>
                 <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
                 <th class="px-6 py-4 "> 16</th>
@@ -58,57 +60,90 @@
         </table>
     </div>
     <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var data = {
-            labels: ['Aritmetica', 'Algebra', 'Fisica', 'Quimica', 'Lenguaje','Geometria'],
-            datasets: [{
+         // Obtener el idalumno de sessionStorage
+        var idAlumno = sessionStorage.getItem('idalumno');
+
+        // Realizar la solicitud AJAX al controlador
+        fetch('/datossimulacrosgraficos?idAlumno=' + idAlumno)
+          .then(response => response.json())
+          .then(data => {
+            // Los datos devueltos por el controlador deben tener la estructura
+            // { "nombreCurso1": promedioNota1, "nombreCurso2": promedioNota2, ... }
+            var nombresCursos = Object.keys(data);
+            var promediosNotas = Object.values(data);
+
+            // Crear el objeto data para el gráfico
+            var data = {
+              labels: nombresCursos,
+              datasets: [{
                 label: 'PROMEDIO DE NOTA POR CURSO',
-                data: [17,16,20,15,18,14],
+                data: promediosNotas,
                 backgroundColor: 'rgba(195, 123, 40, 0.53)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 0
-            }]
-        };
-        var options = {
-            scales: {
+              }]
+            };
+
+            // Crear y mostrar el gráfico
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var options = {
+              scales: {
                 y: {
-                    beginAtZero: true
+                  beginAtZero: true
                 }
-            }
-        };
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: data,
-            options: options
-        });
+              }
+            };
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: data,
+              options: options
+            });
+          })
+          .catch(error => {
+            console.error('Error al obtener los datos para el gráfico:', error);
+          });
 
-</script>
 
-    <script>
-        var cursos = ['Algebra', 'Fisica', 'Quimica', 'Aritmetica', 'Lenguaje'];
-        var notas = [17,16,20,15,18];
 
-        var ctx = document.getElementById('myChart2').getContext('2d');
+           fetch('/cursosconmasexamenes?idAlumno=' + idAlumno)
+        .then(response => response.json())
+        .then(data => {
+            var cursos = [];
+            var evaluaciones = [];
 
-        var myChart2 = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: cursos,
-                datasets: [{
-                    data: notas,
-                    backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)',
-                    'rgba(75, 192, 192, 0.5)',
-                    'rgba(196, 178, 32, 0.47)'
-                    ]
-                }]
-            },
-            options: {
-                cutout: '80%',
-                responsive: true,
-                maintainAspectRatio: false
-            }
+            // Ordenar los cursos por cantidad de evaluaciones en orden descendente
+            var sortedData = Object.entries(data).sort((a, b) => b[1].cantidadEvaluaciones - a[1].cantidadEvaluaciones);
+
+            // Tomar solo los primeros 3 cursos con más evaluaciones
+            sortedData.slice(0, 3).forEach(entry => {
+                cursos.push(entry[1].nombre);
+                evaluaciones.push(entry[1].cantidadEvaluaciones);
+            });
+
+            // Actualizar el gráfico con los datos
+            var ctx = document.getElementById('myChart2').getContext('2d');
+            var myChart2 = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: cursos,
+                    datasets: [{
+                        data: evaluaciones,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                        ]
+                    }]
+                },
+                options: {
+                    cutout: '80%',
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos:', error);
         });
 </script>
 </div>

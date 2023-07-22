@@ -22,7 +22,7 @@ function mostrarSolucion(element) {
             Swal.fire({
                 html: `
                     <p class="text-lg font-bold text-gray-700 mb-5">Resolución</p>
-                    <p class="text-sm text-gray-700 mb-5">${data.descripcion}</p>
+                    <p class="text-sm text-gray-700 mb-5 text-left">${data.descripcion}</p>
                     <img src="/img/${data.imagenRespuesta}" alt="">
                 `,
                 showCancelButton: false,
