@@ -6,9 +6,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 @SpringBootApplication
 public class PlataformaCerebritosApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(PlataformaCerebritosApplication.class, args);
 	}
-
 }

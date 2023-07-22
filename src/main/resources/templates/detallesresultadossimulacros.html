@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>
+    <title>Title</title>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <input type="hidden" th:value="${idevaluacionsimulacro}" class="idevaluacionsimulacro" id="idevaluacionsimulacro">
+    <span class="text-3xl font-extrabold pb-3 text-gray-700">Detalles de la evaluación simulacro</span>
+    <canvas id="chart" class="min-w-[10rem] scale-75"></canvas>
+    <!-- En la vista detallesresultadossimulacros -->
+    <table>
+        <tr>
+            <th>Curso</th>
+            <th>Estado 0</th>
+            <th>Estado 1</th>
+        </tr>
+        <!-- Iterar sobre la lista resultadosPorCurso -->
+        <tr th:each="resultado : ${resultadosPorCurso}">
+            <td th:text="${resultado.curso.nombre}"></td>
+            <td th:text="${resultado.estado0}"></td>
+            <td th:text="${resultado.estado1}"></td>
+        </tr>
+    </table>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var idevaluacionsimulacro = document.getElementById("idevaluacionsimulacro").value;
+        fetch('/datasimulacro_cursos?idevaluacionsimulacro=' + idevaluacionsimulacro, {
+            method: 'GET'
+        })
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+        .then(function(data) {
+            const ctx = document.getElementById('chart').getContext('2d');
+            const cursos = data.map(item => item.curso.nombre);
+            const estado1 = data.map(item => item.estado1);
+
+            // Definir colores personalizados para las barras
+            const colores = [
+                'rgba(255, 99, 132, 0.7)', // Rojo
+                'rgba(54, 162, 235, 0.7)', // Azul
+                'rgba(255, 206, 86, 0.7)', // Amarillo
+                // Agregar más colores aquí si es necesario
+            ];
+
+            const datasets = [{
+                label: 'Preguntas en estado 1',
+                data: estado1,
+                backgroundColor: colores,
+            }];
+
+            const chart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: cursos,
+                datasets: datasets,
+              },
+              options: {
+                indexAxis: 'y',
+                responsive: true
+              }
+            });
+        })
+        .catch(function(error) {
+            console.error('Error al obtener los datos de la pregunta:', error);
+        });
+    })
+</script>
+
+</div>
+</body>
+</html>

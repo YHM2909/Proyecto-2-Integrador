@@ -26,6 +26,17 @@ public class ResultadoPreguntaSimulacro {
     public int getIdEvaluacionSimulacro() {
         return idEvaluacionSimulacro;
     }
+    @ManyToOne
+    @JoinColumn(name = "id_cursoresultado", referencedColumnName = "id_curso", insertable = false, updatable = false)
+    private Curso curso;
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
 
     public void setIdEvaluacionSimulacro(int idEvaluacionSimulacro) {
         this.idEvaluacionSimulacro = idEvaluacionSimulacro;
