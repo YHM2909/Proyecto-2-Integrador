@@ -39,19 +39,29 @@
             }
         })
         .then(function(data) {
-        console.log("--------------------1")
             const ctx = document.getElementById('chart').getContext('2d');
             const cursos = data.map(item => item.curso.nombre);
             const estado1 = data.map(item => item.estado1);
+
+            // Definir colores personalizados para las barras
+            const colores = [
+                'rgba(255, 99, 132, 0.7)', // Rojo
+                'rgba(54, 162, 235, 0.7)', // Azul
+                'rgba(255, 206, 86, 0.7)', // Amarillo
+                // Agregar más colores aquí si es necesario
+            ];
+
+            const datasets = [{
+                label: 'Preguntas en estado 1',
+                data: estado1,
+                backgroundColor: colores,
+            }];
 
             const chart = new Chart(ctx, {
               type: 'bar',
               data: {
                 labels: cursos,
-                datasets: [{
-                  label: 'Preguntas en estado 1',
-                  data: estado1,
-                }],
+                datasets: datasets,
               },
               options: {
                 indexAxis: 'y',
@@ -64,6 +74,7 @@
         });
     })
 </script>
+
 </div>
 </body>
 </html>

@@ -74,10 +74,9 @@ public class SimulacrosController {
     }
 
     @GetMapping("/datasimulacro_cursos")
-    public ResponseEntity<List<ResultadoCursoSimulacro>> datasimulacro_cursos(@PathVariable("idevaluacionsimulacro") int idevaluacionsimulacro) {
+    public ResponseEntity<List<ResultadoCursoSimulacro>> datasimulacro_cursos(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro) {
         List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByidEvaluacionSimulacro(idevaluacionsimulacro);
         // Crear un mapa para agrupar los resultados por curso
-        System.out.println("-----------------------1");
         Map<Curso, int[]> resultadosPorCurso = new HashMap<>();
         // Procesar los resultados y contar los estados por curso
         for (ResultadoPreguntaSimulacro resultado : resultados) {
@@ -90,7 +89,6 @@ public class SimulacrosController {
             }
             resultadosPorCurso.put(resultado.getCurso(), contadorEstados);
         }
-        System.out.println("-----------------------2");
         // Convertir el mapa a una lista de objetos
         List<ResultadoCursoSimulacro> resultadosCursoList = new ArrayList<>();
         for (Map.Entry<Curso, int[]> entry : resultadosPorCurso.entrySet()) {
@@ -100,13 +98,12 @@ public class SimulacrosController {
             resultadoCursosimulacro.setEstado1(entry.getValue()[1]);
             resultadosCursoList.add(resultadoCursosimulacro);
         }
-        System.out.println("-----------------------3");
         return ResponseEntity.ok(resultadosCursoList);
     }
 
     @GetMapping("/simulacros/{idevaluacion}")
-    public ResponseEntity<List<CursoResultadoSimulacro>> obtenerResultadosSimulacro(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro) {
-        List<CursoResultadoSimulacro> resultadosSimulacroCursos = cursoResultadoSimulacroRepository.findByIdEvaluacionSimulacro(idevaluacionsimulacro);
+    public ResponseEntity<List<CursoResultadoSimulacro>> obtenerResultadosSimulacro(@PathVariable("idevaluacion") int idevaluacion) {
+        List<CursoResultadoSimulacro> resultadosSimulacroCursos = cursoResultadoSimulacroRepository.findByIdEvaluacionSimulacro(idevaluacion);
 
         // Iterar sobre los resultados y obtener el nombre del curso
         for (CursoResultadoSimulacro resultado : resultadosSimulacroCursos) {
