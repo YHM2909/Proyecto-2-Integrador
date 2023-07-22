@@ -2,7 +2,8 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Academia cerebritos</title>
+    <script th:src="@{/js/resultadosimulacro.js}"></script>
 </head>
 <body th:replace="layout.html">
 <!-- Contenido específico de la página -->
@@ -25,12 +26,23 @@
                 </div>
             </div>
         </div>
-        <div class="mt-8 p-5 rounded-xl bg-white min-w-[18rem]">
-            <p>Alumno: <span>Juan carlos</span> </p>
-            <p>Nota: <span>15</span> </p>
+        <div class="min-w-[18rem] mt-7">
+            <div class="flex justify-center items-center w-full">
+                <a th:href="@{/masdetallesresultados_simulacros(idevaluacionsimulacro=${idevaluacionsimulacro})}"
+                   class="px-4 py-2 bg-indigo-500 text-white rounded-lg w-full flex justify-between items-center hover:bg-indigo-600">
+                    Ver más detalles
+                    <i class="fa-solid fa-arrow-right-long"></i>
+                </a>
+            </div>
+            <div class="mt-2 p-5 rounded-xl bg-white w-full max-h-[20rem] text-base text-gray-500 font-bold">
+                <p class="text-indigo-500 font-bold text-lg">Resumen examen</p>
+                <p class="py-1">Alumno: <span class="nombre_estudiante" id="nombre_estudiante"></span></p>
+                <p class="py-1">Nota: <span th:text="${notasimulacro}"></span></p>
+                <p class="py-1">Fecha: <span th:text="${fechaHoraActualFormateada}"></span></p>
+                <p class="py-1 ">Cantidad de preguntas: 100</p>
+            </div>
         </div>
     </div>
-
 </div>
 </body>
 </html>

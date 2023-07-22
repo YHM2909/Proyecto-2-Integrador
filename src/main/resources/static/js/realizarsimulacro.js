@@ -35,6 +35,17 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     var datosJSON = JSON.stringify(objetoDatos);
+       Swal.fire({
+          title: "Procesando",
+          text: "Se está evaluando tus respuestas, ten paciencia, recuerda que el esfuerzo construye el camino hacia la grandeza.",
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          allowEnterKey: false,
+          showConfirmButton: false,
+          onBeforeOpen: () => {
+            Swal.showLoading();
+          }
+        });
     console.log(datosJSON);
        fetch('/recopilar_respuestas_simulacro', {
           method: 'POST',
@@ -52,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
           })
 
           .then(function(data) {
+            Swal.close();
             var idevaluacion = data.idevaluacion;
 
             window.location.href = "/resultados_simulacro?idevaluacionsimulacro=" + idevaluacionsimulacro;

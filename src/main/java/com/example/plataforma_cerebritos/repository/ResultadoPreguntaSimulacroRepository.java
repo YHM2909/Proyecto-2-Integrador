@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ResultadoPreguntaSimulacroRepository extends CrudRepository<ResultadoPreguntaSimulacro, Integer> {
-    List<ResultadoPreguntaSimulacro> findByIdevaluacionsimulacro(int idevaluacionsimulacro);
+    List<ResultadoPreguntaSimulacro> findByidEvaluacionSimulacro(int idEvaluacionSimulacro);
 
 }

@@ -6,6 +6,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Optional;
@@ -45,10 +49,14 @@ public class NavegationController {
     public String detallesimulacro(@RequestParam("idalumno") String idalumno,
                                    @RequestParam("iduniversidad") String idUniversidad, Model model) {
         List<EvaluacionSimulacro> evaluacionesSimulacro = evaluacionSimulacroRepository.findByidAlumno(Integer.parseInt(idalumno));
+
+        // Limitar las evaluaciones a los 12 registros más recientes
+        int startIndex = Math.max(evaluacionesSimulacro.size() - 12, 0);
+        List<EvaluacionSimulacro> UltimasevaluacionesSimulacro = evaluacionesSimulacro.subList(startIndex, evaluacionesSimulacro.size());
         List<CursoDto> cursos = cursoGrupoRepository.findCursosByUniversidad(Integer.parseInt(idUniversidad));
         // Obtener los nombres de los cursos del CursoRepository
         model.addAttribute("cursos", cursos);
-        model.addAttribute("evaluacionesSimulacro", evaluacionesSimulacro);
+        model.addAttribute("evaluacionesSimulacro", UltimasevaluacionesSimulacro);
         return "detallesimulacro";
     }
 
@@ -98,9 +106,16 @@ public class NavegationController {
 
     @GetMapping("/resultados_simulacro")
     public String resultados_simulacro(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro, Model model) {
-
-        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByIdevaluacionsimulacro(idevaluacionsimulacro);
+        EvaluacionSimulacro evaluacionSimulacro = evaluacionSimulacroRepository.findById(idevaluacionsimulacro).orElse(null);
+        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByidEvaluacionSimulacro(idevaluacionsimulacro);
+        // Obtener fecha y hora actual
+        LocalDateTime fechaHoraActual = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // Formato de fecha y hora
+        String fechaHoraActualFormateada = fechaHoraActual.format(formatter);
         model.addAttribute("resultadospreguntasimulacro", resultados);
+        model.addAttribute("notasimulacro", evaluacionSimulacro.getNota());
+        model.addAttribute("idevaluacionsimulacro", idevaluacionsimulacro);
+        model.addAttribute("fechaHoraActualFormateada", fechaHoraActualFormateada);
         return "resultados_simulacro";
     }
 }

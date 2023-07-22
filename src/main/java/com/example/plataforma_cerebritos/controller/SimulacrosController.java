@@ -1,6 +1,7 @@
 package com.example.plataforma_cerebritos.controller;
 
 import com.example.plataforma_cerebritos.models.*;
+import com.example.plataforma_cerebritos.models.simulacros.ResultadoCursoSimulacro;
 import com.example.plataforma_cerebritos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +36,77 @@ public class SimulacrosController {
     public String reportesimulacros(Model model) {
         return "reportesimulacros";
     }
+
+    @GetMapping("/masdetallesresultados_simulacros")
+    public String masdetallesresultados_simulacros(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro, Model model) {
+        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByidEvaluacionSimulacro(idevaluacionsimulacro);
+
+        // Crear un mapa para agrupar los resultados por curso
+        Map<Curso, int[]> resultadosPorCurso = new HashMap<>();
+
+        // Procesar los resultados y contar los estados por curso
+        for (ResultadoPreguntaSimulacro resultado : resultados) {
+            int estado = resultado.getEstado();
+            int[] contadorEstados = resultadosPorCurso.getOrDefault(resultado.getCurso(), new int[]{0, 0});
+
+            if (estado == 0) {
+                contadorEstados[0]++; // Aumentar contador de estado 0
+            } else if (estado == 1) {
+                contadorEstados[1]++; // Aumentar contador de estado 1
+            }
+
+            resultadosPorCurso.put(resultado.getCurso(), contadorEstados);
+        }
+
+        // Convertir el mapa a una lista de objetos
+        List<ResultadoCursoSimulacro> resultadosCursoList = new ArrayList<>();
+        for (Map.Entry<Curso, int[]> entry : resultadosPorCurso.entrySet()) {
+            ResultadoCursoSimulacro resultadoCursosimulacro = new ResultadoCursoSimulacro();
+            resultadoCursosimulacro.setCurso(entry.getKey());
+            resultadoCursosimulacro.setEstado0(entry.getValue()[0]);
+            resultadoCursosimulacro.setEstado1(entry.getValue()[1]);
+            resultadosCursoList.add(resultadoCursosimulacro);
+        }
+        model.addAttribute("idevaluacionsimulacro", idevaluacionsimulacro);
+        model.addAttribute("resultadospreguntasimulacro", resultados);
+        model.addAttribute("resultadosPorCurso", resultadosCursoList);
+        return "detallesresultadossimulacros";
+    }
+
+    @GetMapping("/datasimulacro_cursos")
+    public ResponseEntity<List<ResultadoCursoSimulacro>> datasimulacro_cursos(@PathVariable("idevaluacionsimulacro") int idevaluacionsimulacro) {
+        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByidEvaluacionSimulacro(idevaluacionsimulacro);
+        // Crear un mapa para agrupar los resultados por curso
+        System.out.println("-----------------------1");
+        Map<Curso, int[]> resultadosPorCurso = new HashMap<>();
+        // Procesar los resultados y contar los estados por curso
+        for (ResultadoPreguntaSimulacro resultado : resultados) {
+            int estado = resultado.getEstado();
+            int[] contadorEstados = resultadosPorCurso.getOrDefault(resultado.getCurso(), new int[]{0, 0});
+            if (estado == 0) {
+                contadorEstados[0]++; // Aumentar contador de estado 0
+            } else if (estado == 1) {
+                contadorEstados[1]++; // Aumentar contador de estado 1
+            }
+            resultadosPorCurso.put(resultado.getCurso(), contadorEstados);
+        }
+        System.out.println("-----------------------2");
+        // Convertir el mapa a una lista de objetos
+        List<ResultadoCursoSimulacro> resultadosCursoList = new ArrayList<>();
+        for (Map.Entry<Curso, int[]> entry : resultadosPorCurso.entrySet()) {
+            ResultadoCursoSimulacro resultadoCursosimulacro = new ResultadoCursoSimulacro();
+            resultadoCursosimulacro.setCurso(entry.getKey());
+            resultadoCursosimulacro.setEstado0(entry.getValue()[0]);
+            resultadoCursosimulacro.setEstado1(entry.getValue()[1]);
+            resultadosCursoList.add(resultadoCursosimulacro);
+        }
+        System.out.println("-----------------------3");
+        return ResponseEntity.ok(resultadosCursoList);
+    }
+
     @GetMapping("/simulacros/{idevaluacion}")
-    public ResponseEntity<List<CursoResultadoSimulacro>> obtenerResultadosSimulacro(@PathVariable("idevaluacion") int idevaluacion) {
-        List<CursoResultadoSimulacro> resultadosSimulacroCursos = cursoResultadoSimulacroRepository.findByIdEvaluacionSimulacro(idevaluacion);
+    public ResponseEntity<List<CursoResultadoSimulacro>> obtenerResultadosSimulacro(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro) {
+        List<CursoResultadoSimulacro> resultadosSimulacroCursos = cursoResultadoSimulacroRepository.findByIdEvaluacionSimulacro(idevaluacionsimulacro);
 
         // Iterar sobre los resultados y obtener el nombre del curso
         for (CursoResultadoSimulacro resultado : resultadosSimulacroCursos) {
