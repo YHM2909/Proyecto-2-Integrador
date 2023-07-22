@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>
+    <title>Title</title>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <input type="hidden" th:value="${idevaluacionsimulacro}" class="idevaluacionsimulacro" id="idevaluacionsimulacro">
+    <span class="text-3xl font-extrabold pb-3 text-gray-700">Detalles de la evaluación simulacro</span>
+    <div class="w-full flex gap-5 pt-10">
+        <div class="bg-white rounded-xl p-5 w-full">
+            <p class="text-gray-500 font-bold text-xl text-center pb-5">Preguntas correctas por curso</p>
+            <canvas id="chart1" class="min-w-[100%] w-full h-full min-h-[100%]"></canvas>
+        </div>
+        <div class="p-5 bg-white rounded-xl max-w-[28rem]">
+            <table>
+                <tr>
+                    <th class="p-2">Curso</th>
+                    <th class="p-2">Respuestas Incorrectas</th>
+                    <th class="p-2">Respuestas Correctas</th>
+                </tr>
+                <!-- Iterar sobre la lista resultadosPorCurso -->
+                <tr th:each="resultado : ${resultadosPorCurso}">
+                    <td th:text="${resultado.curso.nombre}" class="p-2"></td>
+                    <td th:text="${resultado.estado0}"  class="p-2 text-center"></td>
+                    <td th:text="${resultado.estado1}"  class="p-2 text-center"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- En la vista detallesresultadossimulacros -->
+    <div class="flex pt-5 w-full gap-5">
+        <div class="bg-white rounded-xl p-5 w-full">
+            <p class="text-gray-500 font-bold text-xl text-center pb-5">Preguntas incorrectas por curso</p>
+            <canvas id="chart2" class="min-w-[100%] w-full h-full min-h-[100%]"></canvas>
+        </div>
+        <div class="p-5 bg-white rounded-xl min-w-[28rem]">
+            <p class="text-lg text-gray-500 font-bold text-center pb-5">Cursos recomendados a repasar</p>
+            <ul id="cursosRecomendados" class="w-full"></ul>
+        </div>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var idevaluacionsimulacro = document.getElementById("idevaluacionsimulacro").value;
+        fetch('/datasimulacro_cursos?idevaluacionsimulacro=' + idevaluacionsimulacro, {
+            method: 'GET'
+        })
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Error en la solicitud');
+            }
+        })
+        .then(function(data) {
+            // --------------Crear el primer grafico---------------
+                const ctx = document.getElementById('chart1').getContext('2d');
+                const cursos = data.map(item => item.curso.nombre);
+                const estado1 = data.map(item => item.estado1);
+
+                // Definir colores personalizados para las barras
+                const colores1 = [
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                ];
+                const colores2 = [
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                   'rgba(255, 99, 132, 0.7)',
+                ];
+
+                const datasets = [{
+                    label: 'Preguntas correctas',
+                    data: estado1,
+                    backgroundColor: colores1,
+                }];
+
+                const chart = new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: cursos,
+                    datasets: datasets,
+                  },
+                  options: {
+                    indexAxis: 'y',
+                    responsive: true
+                  }
+                });
+            // --------------Crear el segundo grafico---------------
+             const ctx2 = document.getElementById('chart2').getContext('2d');
+                const estado0 = data.map(item => item.estado0);
+
+                const datasets2 = [{
+                    label: 'Preguntas incorrectas',
+                    data: estado0,
+                    backgroundColor: colores2,
+                }];
+
+                const chart2 = new Chart(ctx2, {
+                  type: 'bar',
+                  data: {
+                    labels: cursos,
+                    datasets: datasets2,
+                  },
+                  options: {
+                    indexAxis: 'y',
+                    responsive: true
+                  }
+                });
+
+              // Crear contenedores de cursos recomendados a estudiar
+              // Ordenar la data en base a la cantidad de preguntas incorrectas (estado0) de cada curso
+                data.sort((a, b) => b.estado0 - a.estado0);
+
+                // Obtener los 4 cursos con las mayores cantidades de preguntas incorrectas
+                const cursosRecomendados = data.slice(0, 4);
+
+                // Obtener el contenedor donde se insertarán los nombres de los cursos como elementos <li>
+                const contenedorCursosRecomendados = document.getElementById("cursosRecomendados");
+
+                // Limpiar el contenido previo del contenedor (si es necesario)
+                contenedorCursosRecomendados.innerHTML = "";
+
+                // Crear elementos <li> con los nombres de los cursos recomendados y agregarlos al contenedor
+                cursosRecomendados.forEach(curso => {
+                    const li = document.createElement("li");
+                    li.textContent = curso.curso.nombre;
+                    // Agregar clases al elemento <li> individualmente
+                    li.classList.add("w-full");
+                    li.classList.add("bg-red-500");
+                    li.classList.add("text-white");
+                    li.classList.add("rounded-lg");
+                    li.classList.add("py-2");
+                    li.classList.add("px-3");
+                    li.classList.add("my-2");
+                    contenedorCursosRecomendados.appendChild(li);
+                });
+        })
+        .catch(function(error) {
+            console.error('Error al obtener los datos de la pregunta:', error);
+        });
+    })
+</script>
+
+</div>
+</body>
+</html>

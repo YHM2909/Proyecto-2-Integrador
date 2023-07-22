@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>
+    <script th:src="@{/js/resultadoscurso.js}"></script>
+    <script>
+
+    </script>
+</head>
+<body th:replace="layout.html">
+<div th:fragment="content" class="pt-10">
+    <span class="text-3xl font-extrabold pb-3 text-gray-700">Resultados evaluación curso</span>
+    <div class="flex w-full justify-between gap-5">
+        <div class="mt-8 p-5 rounded-xl bg-white w-full">
+            <div th:each="resultado, iterStat : ${resultados}"
+                 class="resultados text-white px-5 rounded-xl mb-4 flex justify-between items-center py-1"
+                 th:classappend="${resultado.estado == 0} ? 'bg-[#FFBFBE]' : 'bg-[#BFFFBE]'">
+                <div>
+                    <h2 class="descripcion_pregunta text-sm font-extrabold text-gray-500">Pregunta
+                        <span th:text="${iterStat.count}" class="numero_pregunta"></span>
+                    </h2>
+                    <p class="text-gray-500 font-sm text-sm">Calificación <span th:text="${resultado.calificacion}"></span></p>
+                </div>
+                <div class="p-2 rounded-full flex items-center gap-3">
+                    <button class="btn_versolucion py-1 px-3 rounded-xl bg-indigo-300 text-sm" onclick="mostrarSolucion(this)" th:data-id-pregunta="${resultado.idPregunta}">Ver solución</button>
+                    <i class="fa-solid fa-arrow-down-long"></i>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 p-5 rounded-xl bg-white w-full max-h-[20rem] text-base text-gray-500 font-bold max-w-[22rem]">
+            <p class="text-indigo-500 font-bold text-lg">Resumen examen</p>
+            <p>Alumno: <span class="nombre_estudiante" id="nombre_estudiante"></span></p>
+            <p>Nota: <span th:text="${nota}"></span> </p>
+            <p>Fecha: <span th:text="${fecha}"></span> </p>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

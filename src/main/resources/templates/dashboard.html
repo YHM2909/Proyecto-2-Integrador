@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academia cerebritos</title>    <!-- Chart - Graficos dinamicos -->
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+    <div class="flex justify-center gap-5">
+        <div class="w-3/5 overflow-x-auto shadow-xl rounded-lg p-5 max-h-[35rem]">
+            <h1 class="text-gray-600 font-extrabold text-2xl mx-2 my-2 pb-5">Promedio de preguntas respondidas por curso</h1>
+            <canvas id="myChart" class="min-w-[10rem]"></canvas>
+        </div>
+        <div class="w-2/5  overflow-x-auto shadow-xl rounded-lg p-5 max-h-[35rem]">
+            <h1 class="text-gray-600 font-extrabold text-2xl mx-2 my-2 pb-5">Curso con más examenes</h1>
+            <div class="w-full h-full px-10 max-h-[23rem]">
+                <canvas id="myChart2" class="min-w-[10rem]"></canvas>
+            </div>
+        </div>
+    </div>
+    <!--TABLA-->
+    <div class="p-8 mt-15">
+        <table class="w-full text-sm text-left text-gray-500 rounded-xl">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3">Nombre del curso</th>
+                <th scope="col" class="px-6 py-3"> Fecha</th>
+                <th scope="col" class="px-6 py-3"> Nota anterior</th>
+                <th scope="col" class="px-6 py-3"> Nota</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="bg-white border-b hover:bg-gray-50">
+                <th class="px-6 py-4"> Aritmetica</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 15</th>
+                <th class="px-6 py-4"> 20</th>
+            </tr>
+            <tr class="bg-white border-b hover:bg-gray-50">
+                <th class="px-6 py-4"> Algebra</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 14</th>
+                <th class="px-6 py-4"> 19</th>
+            </tr>
+            <tr class="bg-white border-b hover:bg-gray-50">
+                <th class="px-6 py-4"> Geometria</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 16</th>
+                <th class="px-6 py-4"> 12</th>
+            </tr>
+            <tr class="bg-white border-b hover:bg-gray-50">
+                <th class="px-6 py-4"> Lenguaje</th>
+                <th class="px-6 py-4 text-green-600 "> 15/07/23 10:34:34</th>
+                <th class="px-6 py-4 "> 16</th>
+                <th class="px-6 py-4"> 18</th>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <script>
+         // Obtener el idalumno de sessionStorage
+        var idAlumno = sessionStorage.getItem('idalumno');
+
+        // Realizar la solicitud AJAX al controlador
+        fetch('/datossimulacrosgraficos?idAlumno=' + idAlumno)
+          .then(response => response.json())
+          .then(data => {
+            // Los datos devueltos por el controlador deben tener la estructura
+            // { "nombreCurso1": promedioNota1, "nombreCurso2": promedioNota2, ... }
+            var nombresCursos = Object.keys(data);
+            var promediosNotas = Object.values(data);
+
+            // Crear el objeto data para el gráfico
+            var data = {
+              labels: nombresCursos,
+              datasets: [{
+                label: 'PROMEDIO DE NOTA POR CURSO',
+                data: promediosNotas,
+                backgroundColor: 'rgba(195, 123, 40, 0.53)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 0
+              }]
+            };
+
+            // Crear y mostrar el gráfico
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var options = {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            };
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: data,
+              options: options
+            });
+          })
+          .catch(error => {
+            console.error('Error al obtener los datos para el gráfico:', error);
+          });
+
+
+
+           fetch('/cursosconmasexamenes?idAlumno=' + idAlumno)
+        .then(response => response.json())
+        .then(data => {
+            var cursos = [];
+            var evaluaciones = [];
+
+            // Ordenar los cursos por cantidad de evaluaciones en orden descendente
+            var sortedData = Object.entries(data).sort((a, b) => b[1].cantidadEvaluaciones - a[1].cantidadEvaluaciones);
+
+            // Tomar solo los primeros 3 cursos con más evaluaciones
+            sortedData.slice(0, 3).forEach(entry => {
+                cursos.push(entry[1].nombre);
+                evaluaciones.push(entry[1].cantidadEvaluaciones);
+            });
+
+            // Actualizar el gráfico con los datos
+            var ctx = document.getElementById('myChart2').getContext('2d');
+            var myChart2 = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: cursos,
+                    datasets: [{
+                        data: evaluaciones,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                        ]
+                    }]
+                },
+                options: {
+                    cutout: '80%',
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos:', error);
+        });
+</script>
+</div>
+
+</body>
+</html>

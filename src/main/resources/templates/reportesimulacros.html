@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+  <title>Academia cerebritos</title>
+</head>
+<body th:replace="layout.html">
+<!-- Contenido específico de la página -->
+<div th:fragment="content" class="pt-10">
+  <div class="flex justify-between">
+    <span class="text-3xl font-extrabold pb-3 text-gray-700">Reportes simulacros examen de admisión</span>
+    <a th:href="@{/excel/report(idalumno=${idalumno})}"  class="py-2 px-5 bg-orange-400 rounded-lg text-white">Exportar</a>
+  </div>
+
+  <div class="flex relative overflow-x-auto shadow-xl mt-10">
+    <table class="w-full text-center text-gray-500">
+      <thead class=" text-gray-700 uppercase bg-gray-100">
+      <tr>
+        <th class="px-6 py-3">FECHA</th>
+        <th class="px-6 py-3">NOTA</th>
+        <th class="px-6 py-3">R. Correctas</th>
+        <th class="px-6 py-3">R. Incorrectas</th>
+        <th class="px-6 py-3">Curso(+)Rendimiento</th>
+        <th class="px-6 py-3">Curso(-)Rendimiento</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr class="bg-white border-b hover:bg-gray-50" th:each="evaluacion : ${evaluacionesDTO}">
+        <th th:text="${evaluacion.fecha}" class="px-6 py-4 text-green-600 "></th>
+        <td th:text="${evaluacion.nota}" class="px-6 py-4"></td>
+        <td th:text="${evaluacion.pcorrectas}" class="px-6 py-4"></td>
+        <td th:text="${evaluacion.pincorrectas}" class="px-6 py-4"></td>
+        <td th:text="${evaluacion.cursoRendimientoPositivo}" class="px-6 py-4"></td>
+        <td th:text="${evaluacion.cursoRendimientoNegativo}" class="px-6 py-4"></td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>
