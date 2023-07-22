@@ -12,6 +12,7 @@ import java.util.Map;
 public class ExcelReporteController {
     @GetMapping("/report")
     public void writeExcel(HttpServletResponse response) throws IOException {
+
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet1");
 
@@ -34,6 +35,9 @@ public class ExcelReporteController {
         dataCellStyle.setBorderRight(BorderStyle.THIN);
 
         Map<String, Object[]> data = new HashMap<>();
+
+
+
         data.put("1", new Object[]{"Fecha", "Nota", "R. Blanco", "R. Correctas", "R. Incorrectas", "Curso(+)Rendimiento", "Curso(-)Rendimiento"});
         data.put("2", new Object[]{"2023-07-21 10:34:34", 100, 10, 76, 14, "Lenguaje", "Quimica"});
         data.put("3", new Object[]{"2023-07-18 22:25:09", 100, 6, 80, 14, "Fisica", "Aritmetica"});
@@ -41,6 +45,9 @@ public class ExcelReporteController {
         data.put("5", new Object[]{"2023-07-16 23:35:18", 100, 5, 89, 6, "Literatura", "Trigonometria"});
         data.put("6", new Object[]{"2023-07-16 23:30:02", 100, 5, 87, 8, "Algebra", "Historia Uniersal"});
         data.put("7", new Object[]{"2023-07-16 12:07:15", 100, 9, 80, 11, "Geometria", "Lenguaje"});
+
+
+
 
         int rowIndex = 0;
         for (Map.Entry<String, Object[]> entry : data.entrySet()) {
