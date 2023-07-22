@@ -11,12 +11,16 @@
     <!-- Recorre la lista de CursoGrupo -->
     <div class="flex gap-3 w-full">
         <div class="min-w-[20rem] max-h-[20rem] bg-white p-5 rounded-xl">
-            <p> <span>Nombre</span> </p>
+            <p class="my-2"><span class="font-bold">Alumno: </span><span class="nombre_estudiante" id="nombre_estudiante"></span></p>
+            <p class="my-2"><span class="font-bold">Hora inicio: </span><span th:text="${horaActual}"></span> </p>
+            <p class="my-2"><span class="font-bold">Tiempo brindado: </span><span th:text="${tiempoExamen}" id="tiempo_examen"></span> min</p>
+            <p class="my-2"><span class="font-bold">Cantidad de preguntas: </span><span th:text="${cantidadPreguntas}"></span></p>
+            <p class="my-2"><span class="font-bold">Tiempo restante: </span><span class="font-bold text-orange-400" id="tiempo_restante"></span> min</p>
         </div>
         <div class="bg-white p-5 rounded-xl w-full">
             <div th:each="cursoGrupo : ${cursoGrupos}" class="mb-8">
                 <input type="hidden" th:value="${idSimulacroEvaluacion}" class="idevaluacionsimulacro" id="idevaluacionsimulacro">
-                <h2 class="text-lg font-bold mb-4">Curso Grupo ID: <span th:text="${cursoGrupo.idCurso}"></span></h2>
+                <h2 class="text-xl font-bold mb-4 text-indigo-400 font-extrabold">Curso: <span th:text="${cursoGrupo.curso.nombre}"></span></h2>
                 <!-- Recorre la lista de preguntas para cada CursoGrupo -->
                 <div class="pregunta" th:each="pregunta, iterStat : ${cursoGrupo.preguntas}">
                     <input type="hidden" th:value="${cursoGrupo.idCurso}" class="idcurso">
@@ -35,7 +39,7 @@
                 </div>
             </div>
             <div class="flex justify-end">
-                <button class="bg-orange-400 px-3 py-2 rounded-xl text-white" id="terminar_examen">Terminar</button>
+                <button class="bg-orange-400 px-3 py-2 rounded-xl text-white min-w-[5rem] hover:bg-orange-500" id="terminar_examen">Terminar</button>
             </div>
         </div>
     </div>

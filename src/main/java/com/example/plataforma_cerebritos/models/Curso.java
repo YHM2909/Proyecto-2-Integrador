@@ -1,9 +1,8 @@
 package com.example.plataforma_cerebritos.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "curso")
@@ -14,6 +13,9 @@ public class Curso {
 
     @Column(name = "nombre")
     private String nombre;
+
+    @OneToMany(mappedBy = "curso")
+    private List<CursoGrupo> grupos;
 
     public Curso(Integer idCurso, String nombre) {
         this.idCurso = idCurso;
