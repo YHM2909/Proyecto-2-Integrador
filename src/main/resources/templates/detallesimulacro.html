@@ -59,7 +59,18 @@
   function empezarsimulacro() {
     var idalumno = sessionStorage.getItem("idalumno");
     var iduniversidad = sessionStorage.getItem("iduniversidad");
-    console.log("-REALIZAR EXAMEN---")
+    Swal.fire({
+      title: "Procesando",
+      text: "Se está elaborando su examen...",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      allowEnterKey: false,
+      showConfirmButton: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     window.location.href = "/realizarsimulacro?idalumno=" + idalumno + "&iduniversidad=" + iduniversidad;
   }
 </script>

@@ -14,7 +14,6 @@ public class ExcelReporteController {
     public void writeExcel(HttpServletResponse response) throws IOException {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet1");
-
         CellStyle headerStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
         font.setBold(true);
@@ -26,7 +25,6 @@ public class ExcelReporteController {
         headerStyle.setBorderLeft(BorderStyle.THIN);
         headerStyle.setBorderRight(BorderStyle.THIN);
         headerStyle.setAlignment(HorizontalAlignment.CENTER);
-
         CellStyle dataCellStyle = workbook.createCellStyle();
         dataCellStyle.setBorderTop(BorderStyle.THIN);
         dataCellStyle.setBorderBottom(BorderStyle.THIN);
@@ -34,6 +32,7 @@ public class ExcelReporteController {
         dataCellStyle.setBorderRight(BorderStyle.THIN);
 
         Map<String, Object[]> data = new HashMap<>();
+
         data.put("1", new Object[]{"Fecha", "Nota", "R. Blanco", "R. Correctas", "R. Incorrectas", "Curso(+)Rendimiento", "Curso(-)Rendimiento"});
         data.put("2", new Object[]{"2023-07-21 10:34:34", 100, 10, 76, 14, "Lenguaje", "Quimica"});
         data.put("3", new Object[]{"2023-07-18 22:25:09", 100, 6, 80, 14, "Fisica", "Aritmetica"});

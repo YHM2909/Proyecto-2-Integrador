@@ -1,6 +1,7 @@
 package com.example.plataforma_cerebritos.controller;
 
 import com.example.plataforma_cerebritos.models.*;
+import com.example.plataforma_cerebritos.models.simulacros.ResultadoCursoSimulacro;
 import com.example.plataforma_cerebritos.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,71 @@ public class SimulacrosController {
     public String reportesimulacros(Model model) {
         return "reportesimulacros";
     }
+
+    @GetMapping("/masdetallesresultados_simulacros")
+    public String masdetallesresultados_simulacros(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro, Model model) {
+        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByidEvaluacionSimulacro(idevaluacionsimulacro);
+
+        // Crear un mapa para agrupar los resultados por curso
+        Map<Curso, int[]> resultadosPorCurso = new HashMap<>();
+
+        // Procesar los resultados y contar los estados por curso
+        for (ResultadoPreguntaSimulacro resultado : resultados) {
+            int estado = resultado.getEstado();
+            int[] contadorEstados = resultadosPorCurso.getOrDefault(resultado.getCurso(), new int[]{0, 0});
+
+            if (estado == 0) {
+                contadorEstados[0]++; // Aumentar contador de estado 0
+            } else if (estado == 1) {
+                contadorEstados[1]++; // Aumentar contador de estado 1
+            }
+
+            resultadosPorCurso.put(resultado.getCurso(), contadorEstados);
+        }
+
+        // Convertir el mapa a una lista de objetos
+        List<ResultadoCursoSimulacro> resultadosCursoList = new ArrayList<>();
+        for (Map.Entry<Curso, int[]> entry : resultadosPorCurso.entrySet()) {
+            ResultadoCursoSimulacro resultadoCursosimulacro = new ResultadoCursoSimulacro();
+            resultadoCursosimulacro.setCurso(entry.getKey());
+            resultadoCursosimulacro.setEstado0(entry.getValue()[0]);
+            resultadoCursosimulacro.setEstado1(entry.getValue()[1]);
+            resultadosCursoList.add(resultadoCursosimulacro);
+        }
+        model.addAttribute("idevaluacionsimulacro", idevaluacionsimulacro);
+        model.addAttribute("resultadospreguntasimulacro", resultados);
+        model.addAttribute("resultadosPorCurso", resultadosCursoList);
+        return "detallesresultadossimulacros";
+    }
+
+    @GetMapping("/datasimulacro_cursos")
+    public ResponseEntity<List<ResultadoCursoSimulacro>> datasimulacro_cursos(@RequestParam("idevaluacionsimulacro") int idevaluacionsimulacro) {
+        List<ResultadoPreguntaSimulacro> resultados = resultadoPreguntaSimulacroRepository.findByidEvaluacionSimulacro(idevaluacionsimulacro);
+        // Crear un mapa para agrupar los resultados por curso
+        Map<Curso, int[]> resultadosPorCurso = new HashMap<>();
+        // Procesar los resultados y contar los estados por curso
+        for (ResultadoPreguntaSimulacro resultado : resultados) {
+            int estado = resultado.getEstado();
+            int[] contadorEstados = resultadosPorCurso.getOrDefault(resultado.getCurso(), new int[]{0, 0});
+            if (estado == 0) {
+                contadorEstados[0]++; // Aumentar contador de estado 0
+            } else if (estado == 1) {
+                contadorEstados[1]++; // Aumentar contador de estado 1
+            }
+            resultadosPorCurso.put(resultado.getCurso(), contadorEstados);
+        }
+        // Convertir el mapa a una lista de objetos
+        List<ResultadoCursoSimulacro> resultadosCursoList = new ArrayList<>();
+        for (Map.Entry<Curso, int[]> entry : resultadosPorCurso.entrySet()) {
+            ResultadoCursoSimulacro resultadoCursosimulacro = new ResultadoCursoSimulacro();
+            resultadoCursosimulacro.setCurso(entry.getKey());
+            resultadoCursosimulacro.setEstado0(entry.getValue()[0]);
+            resultadoCursosimulacro.setEstado1(entry.getValue()[1]);
+            resultadosCursoList.add(resultadoCursosimulacro);
+        }
+        return ResponseEntity.ok(resultadosCursoList);
+    }
+
     @GetMapping("/simulacros/{idevaluacion}")
     public ResponseEntity<List<CursoResultadoSimulacro>> obtenerResultadosSimulacro(@PathVariable("idevaluacion") int idevaluacion) {
         List<CursoResultadoSimulacro> resultadosSimulacroCursos = cursoResultadoSimulacroRepository.findByIdEvaluacionSimulacro(idevaluacion);
@@ -64,7 +130,9 @@ public class SimulacrosController {
         // Iterar sobre la lista de CursoGrupo y buscar las preguntas para cada idCurso
         for (CursoGrupo cursoGrupo : cursoGrupos) {
             int idCurso = cursoGrupo.getIdCurso();
+            // Obtenemos la cantidad preguntas que le pertenecen a cada curso
             int cantidadPreguntas = cursoGrupo.getCantidadPreguntas();
+            // Obtener todas las preguntas que le pertenecen al curso
             List<Pregunta> preguntas = preguntaRepository.findAllByIdCurso(idCurso);
 
             // Mezclar al azar el orden de las preguntas
@@ -103,14 +171,12 @@ public class SimulacrosController {
     public ResponseEntity<Map<String, Object>> recopilar_respuestas_simulacro(@RequestBody RespuestasSimulacro respuestasSimulacro, Model model) {
         List<RespuestasSimulacro.Respuesta> respuestas = respuestasSimulacro.getListarespuestas();
         int idevaluacionsimulacro = respuestasSimulacro.getIdevaluacionsimulacro();
-
+        System.out.println(idevaluacionsimulacro);
         int totalPreguntas = respuestas.size();
         double puntajeMaximo = 2000.0;
         double puntajePorPregunta = puntajeMaximo / totalPreguntas;
-
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         puntajePorPregunta = Double.parseDouble(decimalFormat.format(puntajePorPregunta));
-
         int preguntasCorrectas = 0;
 
         for (RespuestasSimulacro.Respuesta respuesta : respuestas) {
@@ -118,7 +184,6 @@ public class SimulacrosController {
                 preguntasCorrectas++;
             }
         }
-
         double nota = preguntasCorrectas * puntajePorPregunta;
 
         EvaluacionSimulacro evaluacionSimulacro = evaluacionSimulacroRepository.findById(idevaluacionsimulacro).orElse(null);
@@ -167,7 +232,6 @@ public class SimulacrosController {
                 cursoResultadoSimulacroRepository.save(resultadoSimulacro);
             }
         }
-
         Map<String, Object> response = new HashMap<>();
         response.put("idevaluacionsimulacro", idevaluacionsimulacro);
         return ResponseEntity.ok(response);
